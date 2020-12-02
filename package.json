@@ -1,0 +1,33 @@
+{
+  "name": "code-snippet",
+  "version": "1.0.0",
+  "description": "1. 代码片段\r - 存放代码片段\r 2. 面试题\r 3. 前端基础知识语法(html, css, javascript)\r 4. 个人中心\r 5. 广告(暂定)",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.14.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-vue": "^7.1.0",
+    "stylelint": "^13.8.0",
+    "stylelint-config-standard": "^20.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ./src/",
+    "stylelint": "npx stylelint ./src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiongyechang/code-snippet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiongyechang/code-snippet/issues"
+  },
+  "homepage": "https://github.com/xiongyechang/code-snippet#readme"
+}
