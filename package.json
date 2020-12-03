@@ -1,7 +1,7 @@
 {
   "name": "code-snippet",
   "version": "1.0.0",
-  "description": "1. 代码片段\r - 存放代码片段\r 2. 面试题\r 3. 前端基础知识语法(html, css, javascript)\r 4. 个人中心\r 5. 广告(暂定)",
+  "description": "",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
@@ -9,8 +9,8 @@
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.1.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.5.2",
@@ -19,7 +19,6 @@
     "stylelint-config-standard": "^20.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint ./src/",
     "stylelint": "npx stylelint ./src/"
   },
@@ -30,9 +29,9 @@
   },
   "lint-staged": {
     "src/*": [
-      "eslint --fix",
-      "stylelint --fix",
-      "git add"
+      "prettier src --write",
+      "eslint src --fix",
+      "stylelint src --fix"
     ]
   },
   "repository": {

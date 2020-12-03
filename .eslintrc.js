@@ -12,11 +12,9 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
-    'vue',
-    // 'prettier'
+    'vue'
   ],
   rules: {
-    "no-alert": "error",
-    // "prettier/prettier": "error"
+    "no-alert": "error"
   }
 }
