@@ -6,7 +6,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
-  "dependencies": {},
+  "dependencies": {
+    "dayjs": "^1.9.7",
+    "highlight.js": "^10.4.1",
+    "marked": "^1.2.7"
+  },
   "devDependencies": {
     "eslint": "^7.15.0",
     "eslint-config-standard": "^16.0.2",
@@ -19,7 +23,7 @@
     "stylelint-config-standard": "^20.0.0"
   },
   "scripts": {
-		"lintstyle": "npx stylelint ./**/*.{scss,css,vue}",
-		"lintscript": "npx eslint ./**/*.{js,vue}"
+    "lintstyle": "npx stylelint ./**/*.{scss,css,vue}",
+    "lintscript": "npx eslint ./**/*.{js,vue}"
   }
 }

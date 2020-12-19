@@ -1,0 +1,13 @@
+const app = require("../index");
+const http = require("http");
+const { port } = require("../config/config");
+
+const httpServer = http.createServer(app.callback());
+
+httpServer.listen(port, error => {
+  if (error) {
+    console.error("http 服务启动失败");
+  } else {
+    console.error("http 服务启动成功");
+  }
+});

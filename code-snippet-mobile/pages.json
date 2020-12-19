@@ -6,7 +6,8 @@
 	    "navigationBarBackgroundColor" : "#007AFF",
 	    "backgroundColor" : "#F8F8F8",
 	    "backgroundColorTop" : "#F4F5F6",
-	    "backgroundColorBottom" : "#F4F5F6"
+	    "backgroundColorBottom" : "#F4F5F6",
+			"onReachBottomDistance": 16
 	},
 	"tabBar" : {
 	    "color" : "#7A7E83",
@@ -43,7 +44,8 @@
 	"pages": [{
 		"path" : "pages/code-snippet/code-snippet",
 		"style" : {
-			"navigationBarTitleText" : "代码片段"
+			"navigationBarTitleText" : "代码片段",
+			"enablePullDownRefresh": true
 		}
 	}, {
 		"path" : "pages/interview/interview",
@@ -59,6 +61,11 @@
 		"path" : "pages/me/me",
 		"style" : {
 			"navigationBarTitleText" : "个人中心"
+		}
+	}, {
+		"path" : "pages/code-snippet-details/code-snippet-details",
+		"style" : {
+			"navigationBarTitleText" : "代码片段详情"
 		}
 	}]
 }
