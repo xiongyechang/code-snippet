@@ -1,8 +1,8 @@
 const CodeSnippetModel = require("../models/code-snippet.model");
-const CodeCategoryModel = require("../models/code-category.model");
+// const CodeCategoryModel = require("../models/code-category.model");
 const Router = require("koa-router");
 const Joi = require("@hapi/joi");
-const path = require("path");
+// const path = require("path");
 
 const route = "code-snippet";
 const router = new Router({
@@ -49,7 +49,6 @@ router.get(route + "/list", async (ctx) => {
 // 列出资源列表  ok
 router.get(route + "/search", async (ctx) => {
   let { limit = 20, keyword } = ctx.request.query;
-  // keyword = decodeURIComponent(keyword);
   try {
     const schema = Joi.object({
       keyword: Joi.string().required(),
@@ -95,6 +94,48 @@ router.get(route + "/search", async (ctx) => {
     };
   }
 });
+
+
+// 列出资源列表  ok
+router.get(route + "/by", async (ctx) => {
+  let { limit = 20, categoryId } = ctx.request.query;
+  try {
+    const schema = Joi.object({
+      categoryId: Joi.string().required(),
+      limit: Joi.number().integer().min(1).max(100)
+    });
+
+    let { error } = await schema.validate({ limit, categoryId });
+
+    if (error) {
+      throw error;
+    }
+    
+    limit = parseInt(limit, 10);
+
+    const conditions = { 
+      category: categoryId
+    }
+
+    let rows = await CodeSnippetModel.find(conditions).populate('category').limit(limit);
+
+    let count = await CodeSnippetModel.countDocuments(conditions);
+
+    ctx.body = {
+      status: 200,
+      message: '搜索列表成功',
+      data: { rows, count }
+    }
+  } catch (error) {
+    console.error(error);
+    ctx.body = {
+      status: 500,
+      data: null,
+      msg: error.message,
+    };
+  }
+});
+
 
 // 获取一篇文章 ok
 router.get(`${route}/:_id`, async ctx => {

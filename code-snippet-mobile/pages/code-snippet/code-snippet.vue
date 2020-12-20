@@ -9,7 +9,19 @@
 		<uni-list>
 			<uni-list-chat v-for="item in listData" :key="item.id" @click="rowClickHandler(item)" :title="item.title" :avatar="item.cover" :note="item.note" :link="true" :clickable="true" badge-positon="left" :badge-text="item.content">
 				<view class="chat-custom-right">
-					<text class="title-text">{{ formatDate(item.createdAt, "YYYY-MM-DD") }}</text>
+					<view>
+						<text class="title-text">{{ formatDate(item.createdAt, "YYYY-MM-DD") }}</text>
+					</view>
+					<view>
+						<!-- <uni-icons type="eye-filled" color="#409EFF" size="16" /> -->
+						<!-- <text class="title-text"> : 112</text> -->
+						
+					<!-- 	<uni-icons type="hand-thumbsup-filled" color="#67C23A" size="16" />
+						<text class="title-text">: {{ item.liked }}</text>
+						
+						<uni-icons type="heart-filled" color="#F56C6C" size="16" />
+						<text class="title-text">: {{ item.collected }}</text> -->
+					</view>
 				</view>
 			</uni-list-chat>
 		</uni-list>
@@ -76,12 +88,21 @@ export default {
   methods: {
 		async getCodeCategories() {
 			const { rows, count } = await API.getCodeCategories();
-			this.tabBars = rows.map((row,index) => ({
-				index,
+			const data = rows.map((row,index) => ({
+				index: index + 1,
 				_id: row._id,
 				id: row.title,
 				name: row.title
-			}))
+			}));
+			
+			data.unshift({
+				index: 0,
+				_id: "all",
+				id: "all",
+				name: "全部"
+			})
+						
+			this.tabBars = data;
 		},
 		async fetchData(page = 1, limit = 20, loadMore = false) {
 			const { rows, count } = await API.getCodeSnippets(page, limit);
@@ -122,17 +143,28 @@ export default {
 					icon: "none",
 					mask: true,
 					title: "请输入搜索内容",
-					duration: 3000
+					duration: 1500
 				})
 			}
 		},
 		ontabtap (tab, index) {
+			this.limit = 20;
+			this.page = 1;
 			if (this.tabIndex === index) {
 			    return;
 			}
 			this.tabIndex = index;
 			this.scrollInto = this.tabBars[index].id;
-			console.log(tab);
+			if (tab.id === 'all') {
+				this.fetchData();
+			} else {
+				this.getCodeSnippetsByCategory(tab._id)
+			}
+		},
+		async getCodeSnippetsByCategory (_id) {
+			const { rows, count } = await API.getCodeSnippetsByCategory(_id);
+			this.listData = this.formatData(rows);
+			this.total = count;
 		}
   }
 }
@@ -171,7 +203,6 @@ export default {
 		flex-direction: row;
 		white-space: nowrap;
 		overflow: auto;
-		// background: lightgray;
 		position: sticky;
 		top: 0rpx;
 		z-index: 999;
