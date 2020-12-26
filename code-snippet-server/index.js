@@ -32,10 +32,7 @@ if (env === "development") {
   app.use(
     cors({
       origin: function(ctx) {
-        // console.log(ctx.header);
-        // return "*"; // 允许来自所有域名请求
-        // return ctx.header.origin;
-        return "*"; // 这样就能只允许 http://localhost:8080 这个域名的请求了
+        return "*";
       },
       exposeHeaders: ["WWW-Authenticate", "Server-Authorization"],
       maxAge: 5,

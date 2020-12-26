@@ -13,8 +13,19 @@
   },
   "main": "background.js",
   "dependencies": {
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "element-ui": "^2.14.1",
+    "flowchart.js": "^1.15.0",
+    "lodash": "^4.17.20",
+    "marked": "^1.2.7",
+    "mavon-editor": "^2.9.0",
+    "prismjs": "^1.22.0",
+    "reset-css": "^5.0.1",
+    "vue": "^2.6.11",
+    "vue-router": "^3.4.9",
+    "vuex": "^3.6.0",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -41,7 +52,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-debugger": 0
+    }
   },
   "browserslist": [
     "> 1%",

@@ -23,9 +23,6 @@
 				</view>
 			</view>
 		</view>
-	<!-- 	<view class="tag-view">
-			<uni-tag :mark="true" text="javascript" type="primary" size="small" />
-		</view> -->
 		<view class="neck">
 			<view>{{ data.summary }}</view>
 		</view>

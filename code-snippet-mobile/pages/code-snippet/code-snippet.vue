@@ -52,6 +52,7 @@ export default {
 			tabBars: [],
 			scrollInto: '',
 			tabIndex: 0,
+			cache: {}
 		}
   },
   onLoad () {
@@ -155,6 +156,7 @@ export default {
 			}
 			this.tabIndex = index;
 			this.scrollInto = this.tabBars[index].id;
+			
 			if (tab.id === 'all') {
 				this.fetchData();
 			} else {
