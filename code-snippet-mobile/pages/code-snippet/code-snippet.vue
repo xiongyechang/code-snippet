@@ -110,6 +110,7 @@ export default {
 			if(loadMore) {
 				this.listData = this.listData.concat(this.formatData(rows));
 			} else {
+				console.log(rows);
 				this.listData = this.formatData(rows);
 				this.total = count;
 			}

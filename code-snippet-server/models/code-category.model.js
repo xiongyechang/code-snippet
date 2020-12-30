@@ -19,7 +19,7 @@ const CodeCategorySchema = Schema({
     timestamp: true
 });
 
-const CodeCategoryModel = mongoose.model("note-category", CodeCategorySchema);
+const CodeCategoryModel = mongoose.model("code-category", CodeCategorySchema);
 
 // CodeCategoryModel.init().then(function(){
 //     CodeCategoryModel.create([{

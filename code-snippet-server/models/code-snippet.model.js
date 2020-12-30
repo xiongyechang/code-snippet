@@ -16,7 +16,7 @@ const CodeSnippetSchema = Schema({
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: `note-category`
+        ref: `code-category`
     },
     prev: {
         type: Schema.Types.ObjectId,

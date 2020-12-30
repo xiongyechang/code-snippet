@@ -1,15 +1,9 @@
-const request = function(){
-	
-}
-
-
 class Http {
 	get(url) {
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: url,
 				success: function(response){
-					console.log(response)
 					const { cookies, errMsg, header, statusCode, data: result } = response;
 					if ([200, 304].includes(statusCode)) {						
 						const { status, message, data } = result;

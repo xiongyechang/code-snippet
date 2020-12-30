@@ -1,10 +1,10 @@
 const CodeSnippetModel = require("../models/code-snippet.model");
-const CodeCategoryModel = require("../models/note-category.model");
+const CodeCategoryModel = require("../models/code-category.model");
 const Router = require("koa-router");
 const Joi = require("@hapi/joi");
 const path = require("path");
 
-const route = "note-category";
+const route = "code-category";
 const router = new Router({
   prefix: "/api/",
 });

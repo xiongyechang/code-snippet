@@ -5,7 +5,7 @@ const prefix = `/api`;
 
 const CodeSnippetRoute = `/code-snippet`;
 
-const CodeCategoryRoute = `/note-category`;
+const CodeCategoryRoute = `/code-category`;
 
 export default {
 	async getCodeSnippets (page = 1, limit = 20) {
