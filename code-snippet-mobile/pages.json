@@ -1,0 +1,71 @@
+{
+	"globalStyle" : {
+	    "pageOrientation" : "portrait",
+	    "navigationBarTextStyle" : "white",
+	    "navigationBarTitleText" : "笔记列表",
+	    "navigationBarBackgroundColor" : "#007AFF",
+	    "backgroundColor" : "#F8F8F8",
+	    "backgroundColorTop" : "#F4F5F6",
+	    "backgroundColorBottom" : "#F4F5F6",
+			"onReachBottomDistance": 16
+	},
+	"tabBar" : {
+	    "color" : "#7A7E83",
+	    "selectedColor" : "#007AFF",
+	    "borderStyle" : "black",
+	    "backgroundColor" : "#F8F8F8",
+	    "list" : [
+	        {
+	            "pagePath" : "pages/code-snippet/code-snippet",
+	            "iconPath" : "static/note-ext-d.png",
+	            "selectedIconPath" : "static/note-ext-a.png",
+	            "text" : "笔记列表"
+	        },
+					{
+					    "pagePath" : "pages/todo/todo",
+					    "iconPath" : "static/todo-list-d.png",
+					    "selectedIconPath" : "static/todo-list-a.png",
+					    "text" : "待办事项"
+					},
+					{
+					    "pagePath" : "pages/friends/friends",
+					    "iconPath" : "static/friends-d.png",
+					    "selectedIconPath" : "static/friends-a.png",
+					    "text" : "好友"
+					},
+					{
+					    "pagePath" : "pages/me/me",
+					    "iconPath" : "static/me-d.png",
+					    "selectedIconPath" : "static/me-a.png",
+					    "text" : "个人中心"
+					}
+	    ]
+	},
+	"pages": [{
+		"path" : "pages/code-snippet/code-snippet",
+		"style" : {
+			"navigationBarTitleText" : "笔记列表",
+			"enablePullDownRefresh": true
+		}
+	}, {
+		"path" : "pages/friends/friends",
+		"style" : {
+			"navigationBarTitleText" : "好友"
+		}
+	}, {
+		"path" : "pages/todo/todo",
+		"style" : {
+			"navigationBarTitleText" : "待办事项"
+		}
+	}, {
+		"path" : "pages/me/me",
+		"style" : {
+			"navigationBarTitleText" : "个人中心"
+		}
+	}, {
+		"path" : "pages/code-snippet-details/code-snippet-details",
+		"style" : {
+			"navigationBarTitleText" : "笔记详情"
+		}
+	}]
+}
