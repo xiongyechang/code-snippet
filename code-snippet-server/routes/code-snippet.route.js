@@ -174,16 +174,25 @@ router.get(`${route}/:_id`, async ctx => {
 });
 
 router.post(`${route}`, async ctx => {
+
+  const { title, summary, content, category, prev, next, relations, disabled } = ctx.request.body;
+
   try {
      
     const schema = Joi.object({
       title: Joi.string().required(),
       summary: Joi.string().required(),
       content: Joi.string().required(),
-      category: Joi.string().required()
+      category: Joi.string().required(),
+      prev: Joi.string(),
+      next: Joi.string(),
+      relations: Joi.array().items(Joi.string()).default([]),
+      disabled: Joi.boolean().default(false)
     });
 
-    let { error, value } = await schema.validate(ctx.request.body);
+    let { error, value } = await schema.validate({ title, summary, content, category, prev, next, relations, disabled });
+
+    console.log(value)
 
     if (error) {
       throw error;
@@ -194,6 +203,51 @@ router.post(`${route}`, async ctx => {
     ctx.body = {
       status: 200,
       msg: "添加数据成功",
+      data: CodeSnippet
+    };
+
+    
+  } catch (error) {
+    console.error(error);
+    ctx.body = {
+      status: 500,
+      msg: "服务端异常",
+      data: error
+    };
+  }
+})
+
+router.put(`${route}`, async ctx => {
+
+  const { _id, title, summary, content, category, prev, next, relations, disabled } = ctx.request.body;
+
+  try {
+     
+    const schema = Joi.object({
+      _id: Joi.string().required(),
+      title: Joi.string().required(),
+      summary: Joi.string().required(),
+      content: Joi.string().required(),
+      category: Joi.string().required(),
+      prev: Joi.string(),
+      next: Joi.string(),
+      relations: Joi.array().items(Joi.string()).default([]),
+      disabled: Joi.boolean().default(false)
+    });
+
+    let { error, value } = await schema.validate({ _id, title, summary, content, category, prev, next, relations, disabled });
+
+    console.log(value)
+
+    if (error) {
+      throw error;
+    }
+
+    const CodeSnippet = await CodeSnippetModel.findOneAndUpdate({ _id }, value);
+
+    ctx.body = {
+      status: 200,
+      msg: "更新数据成功",
       data: CodeSnippet
     };
 

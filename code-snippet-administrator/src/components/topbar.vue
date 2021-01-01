@@ -88,6 +88,7 @@ export default {
       }
     },
     close() {
+      debugger
       remote.app.quit();
     },
   },

@@ -11,11 +11,11 @@ const router = new Router({
 
 // 列出资源列表  ok
 router.get(route + "/list", async (ctx) => {
-    let { limit = 20, page = 1 } = ctx.request.query;
+    let { limit = 1000, page = 1 } = ctx.request.query;
     try {
       const schema = Joi.object({
         page: Joi.number().integer().min(1).default(1),
-        limit: Joi.number().integer().min(1).max(100)
+        limit: Joi.number().integer().min(1).max(1000)
       });
   
       let { error } = await schema.validate({ limit, page });

@@ -3,13 +3,48 @@
         <el-row class="row row1">
             <el-col :span="24">
                 <i class="el-icon-s-unfold" style="padding: 0 10px;" @click="showDrawer"></i>
-                <el-button type="primary" icon="el-icon-s-promotion">发布</el-button>
+                <el-button type="primary" icon="el-icon-s-promotion" @click="publish">发布</el-button>
                 <el-button type="danger" icon="el-icon-download" @click="saveMarkdown">保存</el-button>
             </el-col>
         </el-row>
+
         <el-row class="row row2">
-            <el-col class="row2-col1" :span="24">
+            <el-col class="row2-col1" :span="18">
                 <mavon-editor id="editor" v-model="content" @imgAdd="addImg" @save="save"/>
+            </el-col>
+            <el-col :span="6" style="padding: 20px 10px;">
+                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                    <el-form-item label="标题">
+                        <el-input type="text" v-model="form.title" required></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述">
+                        <el-input type="textarea" v-model="form.summary" required></el-input>
+                    </el-form-item>
+                    <el-form-item label="可用性">
+                         <el-switch v-model="form.disabled" required></el-switch>
+                    </el-form-item>
+                    <el-form-item label="分类">
+                        <el-select v-model="form.category" style="width: 100%;" placeholder="请选择分类">
+                            <el-option v-for="item of categories" :key="item._id" :label="item.title" :value="item._id">
+                                <code-category :data="item"></code-category>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="上一篇">
+                        <el-select v-model="form.prev" style="width: 100%;" placeholder="请选择上一篇">
+                            <el-option v-for="item of list" :key="item._id" :label="item.title" :value="item._id">
+                                <code-category :data="item"></code-category>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="下一篇">
+                        <el-select v-model="form.next" style="width: 100%;" placeholder="请选择下一篇">
+                            <el-option v-for="item of list" :key="item._id" :label="item.title" :value="item._id">
+                                <code-category :data="item"></code-category>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
             </el-col>
         </el-row>
         <el-drawer
@@ -26,6 +61,7 @@
 <script>
 import API from '@/api/api'
 import CodeSnippetList from '@/components/code-snippet-list.vue'
+import CodeCategory from '@/components/code-category.vue'
 import marked from 'marked'
 import _ from 'lodash'
 import hljs from 'highlight.js'
@@ -34,15 +70,30 @@ import { parse } from 'flowchart.js'
 import { shell } from 'electron'
 import fs from 'fs'
 
-
 export default {
     name: "admin",
-    components : { CodeSnippetList },
+    components : { CodeSnippetList, CodeCategory },
     data () {
         return {
             content: '',
             drawer: false,
-            list:[]
+            list:[],
+            note: null,
+            form: {
+                title: '',
+                summary: '',
+                disabled: false,
+                category: '',
+                prev: '',
+                next: '',
+                relations: []
+            },
+            rules: {
+                title: [{ required: true, trigger: "blur", message: "请填写标题" }],
+                summary: [{ required: true, trigger: "blur", message: "请填写描述" }],
+
+            },
+            categories: []
         }
     },
     computed: {
@@ -93,12 +144,25 @@ export default {
         });
 
         this.getCodeSnippets();
+
+        this.getCodeCategories();
     },
     methods: {
         async getCodeSnippets (page = 1, limit = 20) {
-            const { rows, count } = await API.getCodeSnippets(page, limit)
-            console.log(rows, count);
-            this.list = this.formatData(rows);
+            try {
+                const { rows } = await API.getCodeSnippets(page, limit)
+                this.list = this.formatData(rows)
+            } catch (error) {
+                console.error(error)
+            }
+        },
+        async getCodeCategories () {
+            try {
+                const { rows } = await API.getCodeCategories()
+                this.categories = rows
+            } catch (error) {
+                console.error(error)
+            }
         },
         formatData (rows) {
 			return rows.map(row => ({
@@ -123,14 +187,39 @@ export default {
             this.drawer = true
         },
         rowClicked (row) {
-            console.log(row);
-            this.content = row.content;
+            console.log(row)
+            this.content = row.content
+            this.form = this.note = row;
         },
         addImg(file){
-            console.log(file);
+            console.log(file)
         },
-        save (html) {
-            console.log(html);
+        save: _.debounce(function (html) {
+            if(!html.trim()) {
+                this.$message.warning("文章内容不能为空")
+                return
+            }
+            try{
+                localStorage.setItem("lastest-note", html)
+                this.$message.success("草稿保存成功")
+            }catch{
+                this.$message.error("草稿保存失败")
+            }
+        }, 1000),
+        async publish () {
+            if(!this.note){
+                return
+            }
+            const request = this.note._id ? API.updateCodeSnippet : API.addCodeSnippet;
+            try {
+                await request({
+                    ...this.note,
+                    category: this.note.category._id,
+                    content: this.content
+                });
+            } catch (error) {
+                console.error(error)
+            }
         }
     }
 }

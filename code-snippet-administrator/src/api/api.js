@@ -5,9 +5,15 @@ const prefix = `/api`;
 
 const CodeSnippetRoute = `/code-snippet`;
 
-const CodeCategoryRoute = `/note-category`;
+const CodeCategoryRoute = `/code-category`;
 
 export default {
+	async addCodeSnippet (codesnippet) {
+		return await http.post(`${baseURL}${prefix}${CodeSnippetRoute}`, codesnippet);
+	},
+	async updateCodeSnippet (codesnippet) {
+		return await http.put(`${baseURL}${prefix}${CodeSnippetRoute}`, codesnippet);
+	},
 	async getCodeSnippets (page = 1, limit = 20) {
 		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/list?page=${page}&limit=${limit}`);
 	},
