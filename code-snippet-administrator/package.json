@@ -21,10 +21,13 @@
     "marked": "^1.2.7",
     "mavon-editor": "^2.9.0",
     "prismjs": "^1.22.0",
+    "qiniu-js": "^3.1.2",
+    "randomstring": "^1.1.5",
     "reset-css": "^5.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.4.9",
     "vuex": "^3.6.0",
+    "vuex-persistedstate": "^4.0.0-beta.3",
     "xss": "^1.0.8"
   },
   "devDependencies": {

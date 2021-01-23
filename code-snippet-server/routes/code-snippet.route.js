@@ -28,7 +28,14 @@ router.get(route + "/list", async (ctx) => {
     limit = parseInt(limit, 10);
     const offset = (page - 1) * limit;
 
-    let rows = await CodeSnippetModel.find().populate('category').skip(offset).limit(limit);
+    let rows = await CodeSnippetModel
+                     .find()
+                     .populate('category')
+                     .populate('prev', '_id title')
+                     .populate('next', '_id title')
+                     .populate('relations')
+                     .skip(offset)
+                     .limit(limit);
     let count = await CodeSnippetModel.countDocuments();
 
     ctx.body = {

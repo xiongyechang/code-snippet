@@ -45,5 +45,93 @@ router.get(route + "/list", async (ctx) => {
       };
     }
 });
+
+router.post(route, async ctx => {
+  const { title } = ctx.request.body;
+  try {
+    const schema =  Joi.string().min(1).max(100).required();
+
+    const { error } = await schema.validate(title);
+
+    if(error) throw error;
+
+    const category = await CodeCategoryModel.create({ title });
+
+    ctx.body = {
+      status: 0,
+      msg: "添加分类成功",
+      data: category
+    };
+  } catch (error) {
+    console.error(error);
+    ctx.body = {
+      status: 500,
+      data: null,
+      msg: error.message,
+    };
+  }
+});
+
+router.put(route, async ctx => {
+  const { title, _id, avatar } = ctx.request.body;
+  try {
+    const schema = Joi.object({
+      _id: Joi.string().required(),
+      title: Joi.string(),
+      avatar: Joi.string()
+    })
+
+    const { error } = await schema.validate({ _id });
+
+    if(error) throw error;
+
+    const category = await CodeCategoryModel.findByIdAndUpdate(_id, {
+      title,
+      avatar
+    });
+
+    ctx.body = {
+      status: 0,
+      msg: "更新分类成功",
+      data: category
+    };
+  } catch (error) {
+    console.error(error);
+    ctx.body = {
+      status: 500,
+      data: null,
+      msg: error.message,
+    };
+  }
+});
+
+router.delete(route, async ctx => {
+  let { _id } = ctx.request.query;
+	try {
+    const schema = Joi.string().required();
+
+    const { error } = schema.validate(_id);
+
+    if(error) throw error;
+
+    // 批量删除
+    const result = await CodeCategoryModel.deleteOne({
+      _id
+    });
+
+    ctx.body = {
+      status: 0,
+      msg: "删除分类成功",
+      data: result
+    };
+  } catch (error) {
+	  console.error(error);
+    ctx.body = {
+      status: 500,
+      data: null,
+      msg: error.message,
+    };
+  }
+});
   
 module.exports = router;

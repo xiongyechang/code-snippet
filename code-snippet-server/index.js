@@ -10,7 +10,7 @@ var serve = require('koa-static-server');
 const { logger } = require("./middleware/logger");
 const app = new Koa();
 
-const { CodeSnippetRouter, CodeCategoryRouter } = require("./routes");
+const { CodeSnippetRouter, CodeCategoryRouter, AdminRouter } = require("./routes");
 
 app.keys = [config.sessionSecret];
 
@@ -67,6 +67,7 @@ app.use(
 
 app.use(CodeSnippetRouter.routes()).use(CodeSnippetRouter.allowedMethods());
 app.use(CodeCategoryRouter.routes()).use(CodeCategoryRouter.allowedMethods());
+app.use(AdminRouter.routes()).use(AdminRouter.allowedMethods());
 
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(serve({rootDir: 'public', rootPath: '/', index: 'index.html'}));

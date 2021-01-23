@@ -31,5 +31,12 @@ html, body, #app {
 #app {
   display: grid;
   grid-auto-rows: 33px calc(100% - 33px);
+  overflow: hidden;
+}
+
+.flex-center-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 </style>

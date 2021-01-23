@@ -7,6 +7,8 @@ const CodeSnippetRoute = `/code-snippet`;
 
 const CodeCategoryRoute = `/code-category`;
 
+const AdminRoute = `/admin`;
+
 export default {
 	async addCodeSnippet (codesnippet) {
 		return await http.post(`${baseURL}${prefix}${CodeSnippetRoute}`, codesnippet);
@@ -26,7 +28,22 @@ export default {
 	async getCodeCategories () {
 		return await http.get(`${baseURL}${prefix}${CodeCategoryRoute}/list`);
 	},
-	async getCodeSnippetsByCategory (_id) {
+	async getCodeSnippetsByCategory ({ _id }) {
 		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/by?categoryId=${_id}`);
-	}
+	},
+	async addCategory (category) {
+		return await http.post(`${baseURL}${prefix}${CodeCategoryRoute}`, category);
+	},
+	async removeCategory ({ _id }) {
+		return await http.delete(`${baseURL}${prefix}${CodeCategoryRoute}?_id=${_id}`);
+	},
+	async updateCategory (category) {
+		return await http.put(`${baseURL}${prefix}${CodeCategoryRoute}`, category);
+	},
+	async getQiniuToken() {
+		return await http.get(`${baseURL}${prefix}${AdminRoute}/getQiniuToken`);
+	},
+	async getQiniuDomain() {
+		return await http.get(`${baseURL}${prefix}${AdminRoute}/getQiniuDomain`);
+	},
 }
