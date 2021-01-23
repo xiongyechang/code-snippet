@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <top-bar class="app-topbar"></top-bar>
-    <router-view class="app-router-view"></router-view>
+    <!-- <transition
+      name="custom-classes-transition"
+      enter-active-class="animated tada"
+      leave-active-class="animated bounceOutRight"> -->
+      <router-view class="app-router-view"></router-view>
+    <!-- </transition> -->
   </div>
 </template>
 
@@ -38,5 +43,9 @@ html, body, #app {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+
+.code-snippet-disabled, .code-snippet-disabled:hover {
+  background: pink !important;
 }
 </style>

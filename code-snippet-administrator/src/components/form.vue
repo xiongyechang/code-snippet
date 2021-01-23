@@ -1,27 +1,31 @@
 <template>
     <div class="admin-page">
-        <el-row class="row row1">
-            <el-col :span="24">
-                <i class="el-icon-s-unfold" style="padding: 0 10px;" @click="showDrawer"></i>
+        <!-- <el-row class="row row1">
+            <el-col :span="24" align="right">
                 <el-button type="primary" icon="el-icon-s-promotion" @click="publish">发布</el-button>
                 <el-button type="danger" icon="el-icon-download" @click="saveMarkdown">保存</el-button>
             </el-col>
-        </el-row>
+        </el-row> -->
 
         <el-row class="row row2">
             <el-col class="row2-col1" :span="18">
-                <mavon-editor id="editor" v-model="content" @imgAdd="addImg" @save="save"/>
+                <mavon-editor id="editor" v-model="form.content" @imgAdd="addImg" @save="save"/>
             </el-col>
-            <el-col :span="6" style="padding: 20px 10px;">
+            <el-col :span="6" style="padding: 0;">
+                <div class="opt">
+                    <el-button type="primary" icon="el-icon-s-promotion" @click="publish">发布</el-button>
+                </div>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px">
                     <el-form-item label="标题" prop="title" required>
                         <el-input type="text" v-model="form.title" required></el-input>
                     </el-form-item>
                     <el-form-item label="描述" prop="summary" required>
-                        <el-input type="textarea" v-model="form.summary" required></el-input>
+                        <el-input type="textarea" rows="10" v-model="form.summary" required></el-input>
                     </el-form-item>
-                    <el-form-item label="可用性" prop="disabled" required>
-                         <el-switch v-model="form.disabled" required></el-switch>
+                    <el-form-item label="禁用" prop="disabled" required>
+                        <el-select filterable v-model="form.disabled" style="width: 100%;" placeholder="是否禁用">
+                            <el-option v-for="item of disabledList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="分类" prop="category" required>
                         <el-select filterable v-model="form.category" style="width: 100%;" placeholder="请选择分类">
@@ -44,7 +48,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="关系" prop="relations">
+                    <el-form-item label="关联" prop="relations">
                         <el-select filterable multiple v-model="form.relations" style="width: 100%;" placeholder="请选择相关项">
                             <el-option v-for="item of list" :key="item._id" :label="item.title" :value="item._id">
                                 <code-category :data="item"></code-category>
@@ -54,20 +58,11 @@
                 </el-form>
             </el-col>
         </el-row>
-        <el-drawer
-            :append-to-body="true"
-            title="我是标题"
-            :visible.sync="drawer"
-            direction="ltr"
-            :with-header="false">
-            <code-snippet-list :data="list" @row-clicked="rowClicked"></code-snippet-list>
-        </el-drawer>
     </div>
 </template>
 
 <script>
 import API from '@/api/api'
-import CodeSnippetList from '@/components/code-snippet-list.vue'
 import CodeCategory from '@/components/code-category.vue'
 import marked from 'marked'
 import _ from 'lodash'
@@ -79,11 +74,13 @@ import fs from 'fs'
 
 export default {
     name: "admin",
-    components : { CodeSnippetList, CodeCategory },
+    components : { CodeCategory },
+    props: {
+        _id: String
+    },
     data () {
         return {
-            content: '',
-            drawer: false,
+            // content: '',
             list:[],
             note: null,
             form: {
@@ -93,19 +90,28 @@ export default {
                 category: '',
                 prev: '',
                 next: '',
-                relations: []
+                relations: [],
+                content: ''
             },
             rules: {
                 title: [{ required: true, trigger: "blur", message: "请填写标题" }],
                 summary: [{ required: true, trigger: "blur", message: "请填写描述" }],
-                category: [{ required: true, trigger: "blur", message: "请选择分类" }]
+                category: [{ required: true, trigger: "blur", message: "请选择分类" }],
+                content: [{ required: true, trigger: "blur", message: "请输入内容" }]
             },
-            categories: []
+            categories: [],
+            disabledList: [{
+                label: "是",
+                value: true
+            }, {
+                label: "否",
+                value: false
+            }]
         }
     },
     computed: {
         compiledMarkdown () {
-            return marked(this.content)
+            return marked(this.form.content)
         }
     },
     directives: {
@@ -117,6 +123,7 @@ export default {
         }
     },
     created () {
+
         var renderer = new marked.Renderer();
 
         renderer.code = (code, language) => {
@@ -150,11 +157,24 @@ export default {
             }
         });
 
+        if(this._id){
+            this.getCodeSnippet(this._id);
+        }
+
         this.getCodeSnippets();
 
         this.getCodeCategories();
     },
     methods: {
+        async getCodeSnippet (_id) {
+            try {
+                const data = await API.getCodeSnippet(_id);
+                console.log(data);
+                this.form = data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
         async getCodeSnippets (page = 1, limit = 20) {
             try {
                 const { rows } = await API.getCodeSnippets(page, limit)
@@ -178,7 +198,7 @@ export default {
 			}))
 		},
         input : _.debounce(function(e) {
-            this.content = e.target.value
+            this.form.content = e.target.value
         }, 300),
         markdownClicked (event) {
             event.preventDefault();
@@ -188,15 +208,7 @@ export default {
             }
         },
         saveMarkdown () {
-            fs.writeFileSync("./markdown.md", this.content);
-        },
-        showDrawer () {
-            this.drawer = true
-        },
-        rowClicked (row) {
-            console.log(row)
-            this.content = row.content
-            this.form = this.note = row;
+            fs.writeFileSync("./markdown.md", this.form.content);
         },
         addImg(file){
             console.log(file)
@@ -214,19 +226,20 @@ export default {
             }
         }, 1000),
         async publish () {
-            if(!this.note){
-                return
-            }
-            const request = this.note._id ? API.updateCodeSnippet : API.addCodeSnippet;
-            try {
-                await request({
-                    ...this.note,
-                    category: this.note.category._id,
-                    content: this.content
-                });
-            } catch (error) {
-                console.error(error)
-            }
+            this.$refs['form'].validate(async valid => {
+                if (valid) {
+                    const request = this._id ? API.updateCodeSnippet : API.addCodeSnippet;
+                    try {
+                        const data = await request(this.form);
+                        console.log(data);
+                    } catch (error) {
+                        console.error(error)
+                    }
+
+                } else {
+                    return false;
+                }
+            });
         }
     }
 }
@@ -243,18 +256,27 @@ export default {
 }
 
 .row1 {
-    padding: 10px 0;
+    padding: 10px;
     background: lightblue;
 }
 
 .row2 {
-    height: calc(100% - 48px);
+    height: calc(100% - 0px);
 }
 
 .row2-col1 {
     padding: 0 !important;
     margin: 0 !important;
     height: 100%;
+}
+
+.opt {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 40px;
+    border-bottom: 1px solid #f2f6fc;
+    padding: 1px 10px;
 }
 
 #editor {

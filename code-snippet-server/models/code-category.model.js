@@ -10,10 +10,6 @@ const CodeCategorySchema = Schema({
     avatar: {
         type: String,
         validate: v => isImageUrl(v)
-    },
-    count: {
-        type: Number,
-        default: 0
     }
 }, {
     timestamp: true

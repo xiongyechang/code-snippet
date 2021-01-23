@@ -1,17 +1,22 @@
 <template>
   <div id="topbar" ref="topbar">
     <div class="topbar-logo">
+        <div v-if="showBackBtn" @click="back" class="back-icon">
+          <span>
+            <i class="el-icon-arrow-left"></i>
+          </span>
+        </div>
         <img src="@/assets/logo.png" width="28" height="28">
         <span>{{ app.getName() }} {{ app.getVersion() }}</span>
     </div>
     <div>
-      <span @click.stop="minimize">
+      <span class="opt-minimize" @click.stop="minimize">
         <i class="el-icon-minus"></i>
       </span>
-      <span @click.stop="maximize">
+      <span class="opt-maximize" @click.stop="maximize">
         <i :class="fullscreen"></i>
       </span>
-      <span @click.stop="close">
+      <span class="opt-close" @click.stop="close">
         <i class="el-icon-close"></i>
       </span>
     </div>
@@ -20,8 +25,6 @@
 
 <script>
 import { remote } from "electron";
-
-
 
 const WindowSize = {
   maximize: "maximize",
@@ -69,6 +72,9 @@ export default {
         ? WindowSizeIcon.max
         : WindowSizeIcon.normal;
     },
+    showBackBtn: function () {
+      return this.$route.path !== '';
+    }
   },
   methods: {
     maximize() {
@@ -88,9 +94,11 @@ export default {
       }
     },
     close() {
-      debugger
       remote.app.quit();
     },
+    back () {
+      this.$router.back();
+    }
   },
 };
 </script>
@@ -104,24 +112,21 @@ export default {
   align-items: center;
   -webkit-app-region: drag;
   .topbar-logo {
-      margin-left: 10px;
       display: flex;
       align-items: center;
       flex-direction: row;
       justify-content: flex-start;
+      .back-icon {
+        margin-right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        &:hover {
+          background-color: red;
+        }
+      }
   }
   div {
     height: 33px;
-    &:first-child {
-      span:last-child:hover {
-        background: var(--primary-color);
-      }
-    }
-    &:last-child {
-      span:last-child:hover {
-        background: red;
-      }
-    }
     span {
       display: inline-block;
       min-width: 40px;
@@ -131,9 +136,15 @@ export default {
       text-align: center;
       color: #fff;
       -webkit-app-region: no-drag;
-      &:hover {
-        background: red;
-      }
+    }
+  }
+
+  .opt-minimize,
+  .opt-maximize,
+  .opt-close {
+    cursor: pointer;
+    &:hover {
+      background: red;
     }
   }
 }

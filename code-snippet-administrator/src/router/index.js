@@ -34,6 +34,16 @@ const router = new VueRouter({
                 keepAlive: false
             },
             component: () => import(`@/views/admin/admin.vue`)
+        },
+        {
+            path: '/form/:_id?',
+            props: true,
+            name: 'form',
+            meta: {
+                title: '表单',
+                keepAlive: false
+            },
+            component: () => import(`@/components/form.vue`)
         }
     ]
 });

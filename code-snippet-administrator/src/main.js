@@ -11,6 +11,7 @@ import 'mavon-editor/dist/css/index.css'
 import "element-ui/lib/theme-chalk/index.css"
 import "@/assets/css/monokai-sublime.css"
 import "@/assets/css/prism.css"
+import "animate.css"
 
 Vue.config.productionTip = false
 

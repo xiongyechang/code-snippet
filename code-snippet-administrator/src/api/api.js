@@ -22,14 +22,17 @@ export default {
 	async getCodeSnippet (_id) {
 		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/${_id}`)
 	},
+	async removeCodeSnippet (_id) {
+		return await http.delete(`${baseURL}${prefix}${CodeSnippetRoute}?_id=${_id}`);
+	},
 	async searchCodeSnippet (keyword = '', limit = 20) {
 		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/search?keyword=${keyword}&limit=${limit}`);
 	},
 	async getCodeCategories () {
 		return await http.get(`${baseURL}${prefix}${CodeCategoryRoute}/list`);
 	},
-	async getCodeSnippetsByCategory ({ _id }) {
-		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/by?categoryId=${_id}`);
+	async getCodeSnippetsByCategory ({ _id, page = 1, limit = 20 }) {
+		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/by?categoryId=${_id}&page=${page}&limit=${limit}`);
 	},
 	async addCategory (category) {
 		return await http.post(`${baseURL}${prefix}${CodeCategoryRoute}`, category);

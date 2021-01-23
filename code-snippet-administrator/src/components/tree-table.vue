@@ -25,10 +25,9 @@
           <template v-else>
             <div class="flex-center-start">
               <input :id="data._id" type="file" :data-id="data._id" style="width: 0;height: 0;overflow: hidden;">
-              <img :src="data.avatar" @click="setCategoryAvatar(data)" height="20" width="20">
+              <img :src="data.avatar" @click.stop="setCategoryAvatar(data)" height="20" width="20">
               <span class="category-title">{{ data.title }}</span>
             </div>
-            <div>{{ data.count }}篇</div>
           </template>
         </div>
       </el-tree>
@@ -36,49 +35,40 @@
     <div class="table-widget">
       <el-row class="table-widget-top">
         <el-col>
-          <el-button type="primary" size="mini" icon="el-icon-plus" @click="addPost">添加</el-button>
-          <el-button type="danger" size="mini" icon="el-icon-remove">删除</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-plus" @click="addCodeSnippet">添加</el-button>
+          <el-button type="danger" size="mini" icon="el-icon-remove" @click="removeCodeSnippets">删除</el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" border stripe highlight-current-row :row-class-name="rowClass" size="mini" height="100%">
+      <el-table :data="tableData" border stripe highlight-current-row :row-class-name="rowClass" @selection-change="selectionChange" size="mini" height="100%">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="" label="编号" width="50">
           <template slot-scope="scope">{{ scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column prop="_id" width="200" label="_id"></el-table-column>
         <el-table-column prop="title" width="300" label="标题" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="viewed" width="120" label="查看"></el-table-column>
-        <el-table-column prop="liked" width="120" label="喜欢"></el-table-column>
-        <el-table-column prop="collected" width="120" label="收藏"></el-table-column>
-        <el-table-column prop="createdAt" width="180" label="发布日期"></el-table-column>
-        <el-table-column prop="updatedAt" width="180" label="更新日期"></el-table-column>
+        <el-table-column width="180" label="查看/喜欢/收藏">
+          <template slot-scope="scope">
+            {{ scope.row.viewed }}/{{ scope.row.liked }}/{{ scope.row.collected }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" width="160" label="发布日期">
+          <template slot-scope="scope">
+            {{ dayjs(scope.row.createdAt).format("YYYY-MM-DD hh:mm:ss") }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="updatedAt" width="160" label="更新日期">
+          <template slot-scope="scope">
+            {{ dayjs(scope.row.updatedAt).format("YYYY-MM-DD hh:mm:ss") }}
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="120">
           <template slot-scope="scope">
-            <el-button @click="updatePost(scope.row)" type="text" size="small">更新</el-button>
+            <el-button @click="updateCodeSnippet(scope.row)" type="text" size="small">更新</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination size="mini" @current-change="currentPageChange" @size-change="currentSizeChange" background  :current-Page="currentPage" :page-size="pageSize" :page-sizes="[20, 40, 60, 100]" layout="total, sizes, prev, pager, next, jumper" :total="total" class="table-widget-bottom"></el-pagination>
+      <el-pagination size="mini" @current-change="currentPageChange" @size-change="currentSizeChange" background  :current-Page="page" :page-size="limit" :page-sizes="[5, 10, 20, 40, 60, 100]" layout="total, sizes, prev, pager, next, jumper" :total="total" class="table-widget-bottom"></el-pagination>
     </div>
-    <el-dialog
-      custom-class="post-form__dialog"
-      :visible.sync="visible"
-      :show-close="false"
-      :destroy-on-close="true"
-      fullscreen>
-      <div slot="title">
-        <el-row>
-          <el-col :span="18">
-            <h3>编辑文章</h3>
-          </el-col>
-          <el-col :span="6" align="right">
-            <el-button type="primary" @click="submit(0)" >发布文章<i class="el-icon-s-promotion el-icon--right"></i></el-button>
-            <el-button type="danger" @click="submit(1)">存为草稿<i class="el-icon-position el-icon--right"></i></el-button>
-            <el-button @click="visible = false">取 消 <i class="el-icon-circle-close el-icon--right"></i> </el-button>
-          </el-col>
-        </el-row>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -86,6 +76,7 @@
   import API from "@/api/api";
   import QiniuMixin from '@/mixins/qiniu';
   import randomstring from 'randomstring';
+  import dayjs from 'dayjs';
 
   const ADD_ID_LENGTH = 8; // 添加的节点 _id 的长度
 
@@ -102,30 +93,29 @@
     data(){
       return {
         selectedTreeNode: null, // 点击树节点后才会有值
-        selectedPost: null,
+        selectedCodeSnippet: null,
         tableData: [],
-        currentPage: 1,
         page: 1,
-        pageSize: 20,
         limit: 20,
         total: 0,
-        visible: false, // 表单
+        multipleSelection: []
       }
     },
     created(){
       this.getCodeSnippets();
     },
     methods: {
+      dayjs,
       rowClass({ row }){
-        return row.isDraft? "isDraft" : "isNotDraft";
+        return row.disabled? "code-snippet-disabled" : "";
       },
       nodeClickHandler(data, node) {
         this.selectedTreeNode = node;
         this.getCodeSnippetsByCategory(data._id);
       },
-      async getCodeSnippets (page = 1, limit = 20) {
+      async getCodeSnippets () {
         try {
-          const { rows, count } = await API.getCodeSnippets(page, limit)
+          const { rows, count } = await API.getCodeSnippets(this.page, this.limit)
           this.tableData = rows;
           this.total = count;
         } catch (error) {
@@ -134,7 +124,7 @@
       },
       async getCodeSnippetsByCategory(_id) {
         try {
-          const { rows, count } = await API.getCodeSnippetsByCategory({ _id, page: this.currentPage, limit: this.pageSize });
+          const { rows, count } = await API.getCodeSnippetsByCategory({ _id, page: this.page, limit: this.limit });
           this.tableData = rows;
           this.total = count;
         } catch(error) {
@@ -207,41 +197,54 @@
         }, false);
         fileUploadDOM.click()
       },
-      currentPageChange(/*page*/){
-        // this.currentPage = page;
-        // if(this.selectedTreeNode){
-        //   this.getCodeSnippetsByCategory(this.selectedTreeNode.data._id);
-        // }else{
-        //   this.getPostsByAdmin();
-        // }
+      currentPageChange(page){
+        this.page = page;
+        if(this.selectedTreeNode){
+          this.getCodeSnippetsByCategory(this.selectedTreeNode.data._id);
+        }else{
+          this.getCodeSnippets();
+        }
       },
-      currentSizeChange(/*size*/){
-        // this.pageSize = size;
-        // if(this.selectedTreeNode){
-        //   this.getCodeSnippetsByCategory(this.selectedTreeNode.data._id);
-        // }else{
-        //   this.getPostsByAdmin();
-        // }
+      currentSizeChange(size){
+        this.limit = size;
+        if(this.selectedTreeNode){
+          this.getCodeSnippetsByCategory(this.selectedTreeNode.data._id);
+        }else{
+          this.getCodeSnippets();
+        }
       },
-      addPost(){
-        // this.selectedPost = null;
-        // this.visible = true;
+      addCodeSnippet () {
+        this.selectedCodeSnippet = null;
+        this.$router.push({
+          name: 'form'
+        })
       },
-      updatePost(/*post*/){
-        // this.selectedPost = post;
-        // this.visible = true;
+      removeCodeSnippets () {
+        if(this.multipleSelection.length){
+          const reqs = this.multipleSelection.map(_id => {
+            return API.removeCodeSnippet(_id)
+          })
+          Promise.all(reqs).then(() => {
+            if (this.selectedTreeNode) {
+              this.getCodeSnippetsByCategory(this.selectedTreeNode.data._id);
+            } else {
+              this.getCodeSnippets();
+            }
+          })
+          .catch(console.error)
+        }
       },
-      submit(/*type*/){
-        // this.$refs["post-form__instance"].submit(type, data => {
-        //   let target = this.tableData.find(item => item._id === data._id);
-        //   if(target) {
-        //     for(let key in target){
-        //       if(target[key] != data[key]){
-        //         target[key] = data[key];
-        //       }
-        //     }
-        //   }
-        // });
+      updateCodeSnippet(codesnippet){
+        this.selectedCodeSnippet = codesnippet;
+        this.$router.push({
+          name: 'form',
+          params: {
+            _id: codesnippet._id
+          }
+        })
+      },
+      selectionChange (list) {
+        this.multipleSelection = list.map(({ _id }) => _id);
       }
     }
   };
@@ -282,7 +285,6 @@
 .post-form__wrapper{
   overflow-y: auto;
 }
-
 
 .custom-tree-node {
   display: flex;

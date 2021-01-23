@@ -2,6 +2,7 @@ const CodeSnippetModel = require("../models/code-snippet.model");
 // const CodeCategoryModel = require("../models/code-category.model");
 const Router = require("koa-router");
 const Joi = require("@hapi/joi");
+const { off } = require("../models/code-snippet.model");
 // const path = require("path");
 
 const route = "code-snippet";
@@ -105,28 +106,31 @@ router.get(route + "/search", async (ctx) => {
 
 // 列出资源列表  ok
 router.get(route + "/by", async (ctx) => {
-  let { limit = 20, categoryId } = ctx.request.query;
+  let { page = 1, limit = 20, categoryId } = ctx.request.query;
   try {
     const schema = Joi.object({
       categoryId: Joi.string().required(),
-      limit: Joi.number().integer().min(1).max(100)
+      limit: Joi.number().integer().min(1).max(100),
+      page: Joi.number().integer().min(1)
     });
 
-    let { error } = await schema.validate({ limit, categoryId });
+    let { error } = await schema.validate({ page, limit, categoryId });
 
     if (error) {
       throw error;
     }
     
     limit = parseInt(limit, 10);
+    page = parseInt(page, 10);
+    const offset = (page - 1) * limit;
 
     const conditions = { 
       category: categoryId
     }
 
-    let rows = await CodeSnippetModel.find(conditions).populate('category').limit(limit);
+    const rows = await CodeSnippetModel.find(conditions).populate('category').skip(offset).limit(limit);
 
-    let count = await CodeSnippetModel.countDocuments(conditions);
+    const count = await CodeSnippetModel.countDocuments(conditions);
 
     ctx.body = {
       status: 200,
@@ -160,7 +164,7 @@ router.get(`${route}/:_id`, async ctx => {
     let CodeSnippet = await CodeSnippetModel.findOneAndUpdate(
       { _id },
       { $inc: { look: 1 } } // look字段 + 1
-    ).populate("category");
+    )
 
     console.log(CodeSnippet)
     
@@ -244,13 +248,19 @@ router.put(`${route}`, async ctx => {
 
     let { error, value } = await schema.validate({ _id, title, summary, content, category, prev, next, relations, disabled });
 
-    console.log(value)
+    console.log({
+      ...value,
+      updatedAt: new Date()
+    })
 
     if (error) {
       throw error;
     }
 
-    const CodeSnippet = await CodeSnippetModel.findOneAndUpdate({ _id }, value);
+    const CodeSnippet = await CodeSnippetModel.findOneAndUpdate({ _id }, {
+      ...value,
+      updatedAt: new Date()
+    });
 
     ctx.body = {
       status: 200,
@@ -268,5 +278,32 @@ router.put(`${route}`, async ctx => {
     };
   }
 })
+
+router.delete(route, async ctx => {
+  let { _id } = ctx.request.query;
+	try {
+    const schema = Joi.string().required();
+
+    const { error } = schema.validate(_id);
+
+    if(error) throw error;
+
+    // 批量删除
+    const result = await CodeSnippetModel.deleteOne({ _id });
+
+    ctx.body = {
+      status: 0,
+      msg: "删除代码片段成功",
+      data: result
+    };
+  } catch (error) {
+	  console.error(error);
+    ctx.body = {
+      status: 500,
+      data: null,
+      msg: error.message,
+    };
+  }
+});
 
 module.exports = router;
