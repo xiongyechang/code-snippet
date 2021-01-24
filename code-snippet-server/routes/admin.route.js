@@ -1,6 +1,9 @@
 const Router = require("koa-router");
 const Qiniu = require("../utils/qiniu")
 const qiniu = require("qiniu")
+const svgCaptcha = require("svg-captcha")
+const { makeKeyPair } = require("../utils/crypto");
+
 
 const route = "admin";
 const router = new Router({
@@ -33,5 +36,48 @@ router.get(route + '/getQiniuDomain', async (ctx, next) => {
 		data: Qiniu.domain
 	}
 });
+
+router.get(route + "/getVerifyCode", async ctx => {
+
+	const cap = svgCaptcha.create({
+		size: 4, // 验证码长度
+		width: 100,
+		height: 32,
+		fontSize: 30,
+		ignoreChars: "0oO1ilI", // 验证码字符中排除 0o1i
+		noise: 3, // 干扰线条的数量
+		color: true, // 验证码的字符是否有颜色，默认没有，如果设定了背景，则默认有
+		background: "#eeeeee" // 验证码图片背景颜色
+	});
+
+	let img = cap.data; // 验证码
+	let text = cap.text.toLowerCase(); // 验证码字符，忽略大小写
+	ctx.session.captcha = text;
+	ctx.type = "html";
+	ctx.body = {
+		status: 0,
+		msg: "获取验证码成功",
+		data: `${img}`
+	};
+});
+
+router.get(route + `/getPublicKey`, async ctx => {
+	try {
+		const { publicKey, privateKey } = await makeKeyPair("rsa");
+		ctx.session.privateKey = privateKey;
+		ctx.body = {
+			status: 0,
+			msg: "成功",
+			data: publicKey
+		};
+	} catch (error) {
+		ctx.body = {
+			status: -1,
+			msg: "系统异常",
+			data: null
+		};
+	}
+});
+
 
 module.exports = router;

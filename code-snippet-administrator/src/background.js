@@ -24,12 +24,13 @@ async function createWindow() {
     minHeight: 768,
     maximizable: true,
     minimizable: true,
-    icon: path.join(__dirname, "..", "public", "favicon.ico"),
+    // icon: path.join(__dirname, "..", "public", "favicon.ico"),
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: true, // process.env.ELECTRON_NODE_INTEGRATION
-      // webSecurity: false
+      webSecurity: false,
+      enableRemoteModule: true
     }
   })
 

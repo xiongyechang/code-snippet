@@ -4,9 +4,10 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-    mode: 'history',
+    // mode: process.env.IS_ELECTRON ? 'hash' : 'history',
+    // base: process.env.BASE_URL,
     routes: [{
-            path: '/login',
+            path: '',
             name: 'login',
             meta: {
                 title: '后台登录',
@@ -27,7 +28,7 @@ const router = new VueRouter({
             component: () => import(`@/views/web/web.vue`)
         },
         {
-            path: '',
+            path: '/admin',
             name: 'admin',
             meta: {
                 title: '管理端',
@@ -44,6 +45,12 @@ const router = new VueRouter({
                 keepAlive: false
             },
             component: () => import(`@/components/form.vue`)
+        }, 
+        {
+            path: "*",
+            redirect: {
+                name: 'admin'
+            }
         }
     ]
 });

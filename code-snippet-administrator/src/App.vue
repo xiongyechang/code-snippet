@@ -1,12 +1,8 @@
 <template>
   <div id="app">
     <top-bar class="app-topbar"></top-bar>
-    <!-- <transition
-      name="custom-classes-transition"
-      enter-active-class="animated tada"
-      leave-active-class="animated bounceOutRight"> -->
-      <router-view class="app-router-view"></router-view>
-    <!-- </transition> -->
+    <router-view class="app-router-view"></router-view>
+    <router-view name="blank"></router-view>
   </div>
 </template>
 

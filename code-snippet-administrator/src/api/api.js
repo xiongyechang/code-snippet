@@ -43,10 +43,17 @@ export default {
 	async updateCategory (category) {
 		return await http.put(`${baseURL}${prefix}${CodeCategoryRoute}`, category);
 	},
-	async getQiniuToken() {
+	// 管理员
+	async getQiniuToken () {
 		return await http.get(`${baseURL}${prefix}${AdminRoute}/getQiniuToken`);
 	},
-	async getQiniuDomain() {
+	async getQiniuDomain () {
 		return await http.get(`${baseURL}${prefix}${AdminRoute}/getQiniuDomain`);
+	},
+	async getVerifyCode () {
+		return await http.get(`${baseURL}${prefix}${AdminRoute}/getVerifyCode`);
+	},
+	async getPublicKey () {
+		return await http.get(`${baseURL}${prefix}${AdminRoute}/getPublicKey`);
 	},
 }

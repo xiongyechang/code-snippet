@@ -9,7 +9,7 @@ module.exports = {
     pluginOptions: {
         electronBuilder: {
             builderOptions: {
-                appId: "wallpaper.xiongyechang.com",
+                appId: "codesnippet.xiongyechang.com",
                 productName: "code-snippet", // 项目名，也是生成的安装文件名，即aDemo.exe
                 copyright: "Copyright © 2021", // 版权信息
                 win: {
