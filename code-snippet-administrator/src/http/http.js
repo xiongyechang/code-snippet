@@ -1,7 +1,14 @@
 import { baseURL } from '@/config/config';
+import { getToken } from '@/utils/utils';
 import axios from "axios";
 
-axios.interceptors.request.use(config => config, Promise.reject);
+axios.interceptors.request.use(config => {
+    const access_token = getToken();
+    if (access_token) {
+      config.headers.authorization = 'Bearer ' + access_token;
+    }
+    return config;
+}, Promise.reject);
 
 axios.interceptors.response.use(response => response, Promise.reject);
 
@@ -35,15 +42,15 @@ export default class Http {
     static PUT = "PUT";
 
     static async get(path, params) {
-        return await request(Http.GET, `${path}`, params).then((r) => r.data.data);
+        return await request(Http.GET, `${path}`, params).then(({ data }) => data);
     }
     static async post(path, params) {
-        return await request(Http.POST, `${path}`, params).then((r) => r.data.data);
+        return await request(Http.POST, `${path}`, params).then(({ data }) => data);
     }
     static async delete(path, params) {
-        return await request(Http.DELETE, `${path}`, params).then((r) => r.data.data);
+        return await request(Http.DELETE, `${path}`, params).then(({ data }) => data);
     }
     static async put(path, params) {
-        return await request(Http.PUT, `${path}`, params).then((r) => r.data.data);
+        return await request(Http.PUT, `${path}`, params).then(({ data }) => data);
     }
 }

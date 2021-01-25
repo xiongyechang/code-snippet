@@ -6,9 +6,8 @@
 console.log(process.env.NODE_ENV);
 let whiteList = [
   /^\/api\/admin\/login/,
-  /^\/api\/admin\/verify_code/,
+  /^\/api\/admin\/getVerifyCode/,
   /^\/api\/admin\/forgetPassword/,
-  /^\/api\/web/,
   /^\/api\/admin\/getPublicKey/
 ];
 if (process.env.NODE_ENV === "production") {

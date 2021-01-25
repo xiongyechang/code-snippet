@@ -64,7 +64,8 @@
 
 <script>
 	import API from "@/api/api";
-	// import JSEncrypt from "jsencrypt";
+	import JSEncrypt from "jsencrypt";
+	import { HttpResponseCode } from '@/constants/constants';
 
 	export default {
 		name: "login-page",
@@ -125,53 +126,68 @@
 				},
 			};
 		},
-		created() {
+		async created() {
 			// 先获取公钥, 再获取验证码, 这样前一个接口返回的cookie正好被后面的接口使用
 			// 如果并行发送请求, 则会请求回来两个不同的cookie, 登陆时, 请求发送的cookie是不对的,
 			// 无法验证 验证码的准确性
-			this.getPublicKey().then(() => {
-				this.getVerifyCode();
-			});
+			await this.getPublicKey();
+			await this.getVerifyCode();
 		},
 		methods: {
 			async getVerifyCode() {
-				this.verifyCodeImg = await API.getVerifyCode();
+				try {
+					const { code, message, data } = await API.getVerifyCode();
+					if (code === HttpResponseCode.OK) {
+						this.verifyCodeImg = data;
+					} else {
+						this.$message.error(message);
+					}
+				} catch (error) {
+					console.error(error);
+				}
 			},
 			async getPublicKey() {
-				this.publicKey = await API.getPublicKey();
+				try {
+					const { code, message, data } = await API.getPublicKey();
+					if (code === HttpResponseCode.OK) {
+						this.publicKey = data;
+					} else {
+						this.$message.error(message);
+					}
+				} catch (error) {
+					console.error(error);
+				}
 			},
-			submitForm(/*formName*/) {
-				// this.$refs[formName].validate(async (valid) => {
-				// 	if (valid) {
-				// 		try {
-				// 			let encrypt = new JSEncrypt();
-				// 			encrypt.setPublicKey(this.publicKey);
-				// 			let username = this.ruleForm.username;
-				// 			let password = encrypt.encrypt(this.ruleForm.password);
-				// 			let verify_code = this.ruleForm.verify_code;
-				// 			let { msg, status, data } = await API.login({
-				// 				username,
-				// 				password,
-				// 				verify_code,
-				// 			});
-				// 			if (status === 0) {
-				// 				localStorage.setItem("access_token", data);
-				// 				this.$store
-				// 					.dispatch("admin/setLoginStatus", true)
-				// 					.then(() => {
-				// 						this.$router.push({
-				// 							path: "/admin/post-manage-page",
-				// 						});
-				// 					});
-				// 			} else {
-				// 			}
-				// 		} catch (error) {
-				// 			throw error;
-				// 		}
-				// 	} else {
-				// 		return false;
-				// 	}
-				// });
+			submitForm(formName) {
+				this.$refs[formName].validate(async (valid) => {
+					if (valid) {
+						try {
+							let encrypt = new JSEncrypt();
+							encrypt.setPublicKey(this.publicKey);
+							let username = this.ruleForm.username;
+							let password = encrypt.encrypt(this.ruleForm.password);
+							let verify_code = this.ruleForm.verify_code;
+							const { code, message, data } = await API.login({ username, password, verify_code });
+							
+							if (code === HttpResponseCode.OK) {
+								localStorage.setItem("access_token", data);
+								this.$store
+									.dispatch("admin/setLoginStatus", true)
+									.then(() => {
+										this.$router.push({
+											name: "admin",
+										});
+									});
+							} else {
+								this.$message.error(message)
+							}
+						} catch (error) {
+							console.error(error);
+						}
+					} else {
+						return false;
+					}
+				});
 			},
 			async forgetPwd() {
 				// let email;

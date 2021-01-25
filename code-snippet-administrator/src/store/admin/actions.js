@@ -1,16 +1,21 @@
 import API from '@/api/api'
+import { HttpResponseCode } from '@/constants/constants';
 
 // 请求七牛云的token
 const getQiniuToken = context => {
-  API.getQiniuToken().then(response => {
-    context.commit('setQiniuToken', response)
-  }).catch(() => {})
+  API.getQiniuToken().then(({ code, data }) => {
+    if (code === HttpResponseCode.OK) {
+      context.commit('setQiniuToken', data);
+    }
+  }).catch(console.error)
 }
 
 const getQiniuDomain = context => {
-  API.getQiniuDomain().then(response => {
-    context.commit('setQiniuDomain', response)
-  }).catch(() => {})
+  API.getQiniuDomain().then(({ code, data }) => {
+    if (code === HttpResponseCode.OK) {
+      context.commit('setQiniuDomain', data);
+    }
+  }).catch(console.error)
 }
 
 const setLoginStatus = ({

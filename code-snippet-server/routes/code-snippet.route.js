@@ -4,6 +4,7 @@ const Router = require("koa-router");
 const Joi = require("@hapi/joi");
 const { off } = require("../models/code-snippet.model");
 // const path = require("path");
+const { HttpResponseCode } = require("../constants/constants")
 
 const route = "code-snippet";
 const router = new Router({
@@ -40,16 +41,16 @@ router.get(route + "/list", async (ctx) => {
     let count = await CodeSnippetModel.countDocuments();
 
     ctx.body = {
-      status: 200,
+      code: HttpResponseCode.OK,
       message: '获取列表成功',
       data: { rows, count }
     }
   } catch (error) {
     console.error(error);
     ctx.body = {
-      status: 500,
-      data: null,
-      msg: error.message,
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 });
@@ -89,16 +90,16 @@ router.get(route + "/search", async (ctx) => {
     let count = await CodeSnippetModel.countDocuments(conditions);
 
     ctx.body = {
-      status: 200,
+      code: HttpResponseCode.OK,
       message: '搜索列表成功',
       data: { rows, count }
     }
   } catch (error) {
     console.error(error);
     ctx.body = {
-      status: 500,
-      data: null,
-      msg: error.message,
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 });
@@ -133,16 +134,16 @@ router.get(route + "/by", async (ctx) => {
     const count = await CodeSnippetModel.countDocuments(conditions);
 
     ctx.body = {
-      status: 200,
+      code: HttpResponseCode.OK,
       message: '搜索列表成功',
       data: { rows, count }
     }
   } catch (error) {
     console.error(error);
     ctx.body = {
-      status: 500,
-      data: null,
-      msg: error.message,
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 });
@@ -169,17 +170,17 @@ router.get(`${route}/:_id`, async ctx => {
     console.log(CodeSnippet)
     
     ctx.body = {
-      status: 200,
-      msg: "获取数据成功",
+      code: HttpResponseCode.OK,
+      message: "获取数据成功",
       data: CodeSnippet
     };
 
   } catch (error) {
     console.log(error);
     ctx.body = {
-      status: 500,
-      msg: "服务端异常",
-      data: error
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 });
@@ -212,8 +213,8 @@ router.post(`${route}`, async ctx => {
     const CodeSnippet = await CodeSnippetModel.create(value);
 
     ctx.body = {
-      status: 200,
-      msg: "添加数据成功",
+      code: HttpResponseCode.OK,
+      message: "添加数据成功",
       data: CodeSnippet
     };
 
@@ -221,9 +222,9 @@ router.post(`${route}`, async ctx => {
   } catch (error) {
     console.error(error);
     ctx.body = {
-      status: 500,
-      msg: "服务端异常",
-      data: error
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 })
@@ -263,8 +264,8 @@ router.put(`${route}`, async ctx => {
     });
 
     ctx.body = {
-      status: 200,
-      msg: "更新数据成功",
+      code: HttpResponseCode.OK,
+      message: "更新数据成功",
       data: CodeSnippet
     };
 
@@ -272,9 +273,9 @@ router.put(`${route}`, async ctx => {
   } catch (error) {
     console.error(error);
     ctx.body = {
-      status: 500,
-      msg: "服务端异常",
-      data: error
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 })
@@ -292,16 +293,16 @@ router.delete(route, async ctx => {
     const result = await CodeSnippetModel.deleteOne({ _id });
 
     ctx.body = {
-      status: 0,
-      msg: "删除代码片段成功",
+      code: HttpResponseCode.OK,
+      message: "删除代码片段成功",
       data: result
     };
   } catch (error) {
 	  console.error(error);
     ctx.body = {
-      status: 500,
-      data: null,
-      msg: error.message,
+      code: HttpResponseCode.EXCEPTION,
+        message: error.message,
+        data: null
     };
   }
 });

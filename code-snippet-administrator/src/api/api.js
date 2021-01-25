@@ -56,4 +56,7 @@ export default {
 	async getPublicKey () {
 		return await http.get(`${baseURL}${prefix}${AdminRoute}/getPublicKey`);
 	},
+	async login(secret) {
+		return await http.post(`${baseURL}${prefix}${AdminRoute}/login`, secret);
+	},
 }

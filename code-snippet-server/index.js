@@ -8,6 +8,8 @@ const cors = require("koa2-cors");
 var serve = require('koa-static-server');
 // 自定义中间件
 const { logger } = require("./middleware/logger");
+const auth = require("./middleware/auth");
+
 const app = new Koa();
 
 const { CodeSnippetRouter, CodeCategoryRouter, AdminRouter } = require("./routes");
@@ -65,11 +67,15 @@ app.use(
   })
 );
 
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+
 app.use(CodeSnippetRouter.routes()).use(CodeSnippetRouter.allowedMethods());
 app.use(CodeCategoryRouter.routes()).use(CodeCategoryRouter.allowedMethods());
+
+app.use(auth);
+
 app.use(AdminRouter.routes()).use(AdminRouter.allowedMethods());
 
-app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(serve({rootDir: 'public', rootPath: '/', index: 'index.html'}));
 
 app.on("error", function(error) {

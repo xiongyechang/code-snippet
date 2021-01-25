@@ -3,6 +3,7 @@ const CodeCategoryModel = require("../models/code-category.model");
 const Router = require("koa-router");
 const Joi = require("@hapi/joi");
 const path = require("path");
+const { HttpResponseCode } = require("../constants/constants");
 
 const route = "code-category";
 const router = new Router({
@@ -32,16 +33,16 @@ router.get(route + "/list", async (ctx) => {
       let count = await CodeCategoryModel.countDocuments();
   
       ctx.body = {
-        status: 200,
+        code: HttpResponseCode.OK,
         message: '获取列表成功',
         data: { rows, count }
       }
     } catch (error) {
       console.error(error);
       ctx.body = {
-        status: 500,
-        data: null,
-        msg: error.message,
+        code: HttpResponseCode.EXCEPTION,
+        message: error.message,
+        data: null
       };
     }
 });
@@ -58,16 +59,16 @@ router.post(route, async ctx => {
     const category = await CodeCategoryModel.create({ title });
 
     ctx.body = {
-      status: 0,
-      msg: "添加分类成功",
+      code: HttpResponseCode.OK,
+      message: "添加分类成功",
       data: category
     };
   } catch (error) {
     console.error(error);
     ctx.body = {
-      status: 500,
-      data: null,
-      msg: error.message,
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 });
@@ -91,16 +92,16 @@ router.put(route, async ctx => {
     });
 
     ctx.body = {
-      status: 0,
-      msg: "更新分类成功",
+      code: HttpResponseCode.OK,
+      message: "更新分类成功",
       data: category
     };
   } catch (error) {
     console.error(error);
     ctx.body = {
-      status: 500,
-      data: null,
-      msg: error.message,
+      code: HttpResponseCode.EXCEPTION,
+      message: error.message,
+      data: null
     };
   }
 });
@@ -120,16 +121,16 @@ router.delete(route, async ctx => {
     });
 
     ctx.body = {
-      status: 0,
-      msg: "删除分类成功",
+      code: HttpResponseCode.OK,
+      message: "删除分类成功",
       data: result
     };
   } catch (error) {
 	  console.error(error);
     ctx.body = {
-      status: 500,
-      data: null,
-      msg: error.message,
+      code: HttpResponseCode.EXCEPTION,
+      message:error.message,
+      data: null
     };
   }
 });

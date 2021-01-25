@@ -71,6 +71,7 @@ import xss from 'xss'
 import { parse } from 'flowchart.js'
 import { shell } from 'electron'
 import fs from 'fs'
+  import { HttpResponseCode } from '@/constants/constants'
 
 export default {
     name: "admin",
@@ -80,7 +81,6 @@ export default {
     },
     data () {
         return {
-            // content: '',
             list:[],
             note: null,
             form: {
@@ -168,25 +168,36 @@ export default {
     methods: {
         async getCodeSnippet (_id) {
             try {
-                const data = await API.getCodeSnippet(_id);
-                console.log(data);
-                this.form = data;
+                const { code, message, data } = await API.getCodeSnippet(_id);
+                if (code === HttpResponseCode.OK) {
+                    this.form = data;
+                } else {
+                    this.$message.error(message);
+                }
             } catch (error) {
                 console.error(error);
             }
         },
         async getCodeSnippets (page = 1, limit = 20) {
             try {
-                const { rows } = await API.getCodeSnippets(page, limit)
-                this.list = this.formatData(rows)
+                const { code, message, data: { rows } } = await API.getCodeSnippets(page, limit)
+                if (code === HttpResponseCode.OK) {
+                    this.list = this.formatData(rows);
+                } else {
+                    this.$message.error(message);
+                }
             } catch (error) {
                 console.error(error)
             }
         },
         async getCodeCategories () {
             try {
-                const { rows } = await API.getCodeCategories()
-                this.categories = rows
+                const { code, message, data: { rows } } = await API.getCodeCategories();
+                if (code === HttpResponseCode.OK) {
+                    this.categories = rows;
+                } else {
+                    this.$message.error(message);
+                }
             } catch (error) {
                 console.error(error)
             }
@@ -230,8 +241,12 @@ export default {
                 if (valid) {
                     const request = this._id ? API.updateCodeSnippet : API.addCodeSnippet;
                     try {
-                        const data = await request(this.form);
-                        console.log(data);
+                        const { code, message} = await request(this.form);
+                        if (code === HttpResponseCode.OK) {
+                            this.$message.success(message);
+                        } else {
+                            this.$message.error(message);
+                        }
                     } catch (error) {
                         console.error(error)
                     }

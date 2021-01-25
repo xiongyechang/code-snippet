@@ -77,6 +77,7 @@
   import QiniuMixin from '@/mixins/qiniu';
   import randomstring from 'randomstring';
   import dayjs from 'dayjs';
+  import { HttpResponseCode } from '@/constants/constants';
 
   const ADD_ID_LENGTH = 8; // 添加的节点 _id 的长度
 
@@ -115,18 +116,26 @@
       },
       async getCodeSnippets () {
         try {
-          const { rows, count } = await API.getCodeSnippets(this.page, this.limit)
-          this.tableData = rows;
-          this.total = count;
+          const { code, message, data: { rows, count } } = await API.getCodeSnippets(this.page, this.limit);
+          if (code === HttpResponseCode.OK) {
+            this.tableData = rows;
+            this.total = count;
+          } else {
+            this.$message.error(message);
+          }
         } catch (error) {
           console.error(error)
         }
       },
       async getCodeSnippetsByCategory(_id) {
         try {
-          const { rows, count } = await API.getCodeSnippetsByCategory({ _id, page: this.page, limit: this.limit });
-          this.tableData = rows;
-          this.total = count;
+          const { code, message, data: { rows, count } } = await API.getCodeSnippetsByCategory({ _id, page: this.page, limit: this.limit });
+          if (code === HttpResponseCode.OK) {
+            this.tableData = rows;
+            this.total = count;
+          } else {
+            this.$message.error(message);
+          }
         } catch(error) {
           console.error(error);
         }
@@ -178,13 +187,18 @@
           request = API.updateCategory;
         }
         try {
-          const data = await request(category);
-          this.$set(category, '_id', data._id);
-          this.$set(category, 'title', event.target.value);
-          this.$set(category, 'editable', false);
+          const { code, message, data } = await request(category);
+
+          if (code === HttpResponseCode.OK) {
+            this.$message.success(message);
+            this.$set(category, '_id', data._id);
+            this.$set(category, 'title', event.target.value);
+            this.$set(category, 'editable', false);
+          } else {
+            this.$message.error(message);
+          }
         } catch(error) {
           console.error(error);
-          this.$message.error(error.message);
         }
       },
       async setCategoryAvatar (data) {
