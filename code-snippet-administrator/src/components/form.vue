@@ -1,12 +1,5 @@
 <template>
     <div class="admin-page">
-        <!-- <el-row class="row row1">
-            <el-col :span="24" align="right">
-                <el-button type="primary" icon="el-icon-s-promotion" @click="publish">发布</el-button>
-                <el-button type="danger" icon="el-icon-download" @click="saveMarkdown">保存</el-button>
-            </el-col>
-        </el-row> -->
-
         <el-row class="row row2">
             <el-col class="row2-col1" :span="18">
                 <mavon-editor id="editor" v-model="form.content" @imgAdd="addImg" @save="save"/>

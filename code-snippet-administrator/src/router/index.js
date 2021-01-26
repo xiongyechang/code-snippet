@@ -4,10 +4,10 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-    // mode: process.env.IS_ELECTRON ? 'hash' : 'history',
-    // base: process.env.BASE_URL,
+    mode: process.env.IS_ELECTRON ? 'hash' : 'history',
+    base: process.env.BASE_URL,
     routes: [{
-            path: '',
+            path: '/login',
             name: 'login',
             meta: {
                 title: '后台登录',
@@ -19,7 +19,7 @@ const router = new VueRouter({
             }
         },
         {
-            path: '/web',
+            path: '',
             name: 'web',
             meta: {
                 title: '主页',

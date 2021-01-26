@@ -6,7 +6,7 @@
             <i class="el-icon-arrow-left"></i>
           </span>
         </div>
-        <img src="@/assets/logo.png" width="28" height="28">
+        <img src="@/assets/logo.png" width="24" height="24">
         <span>{{ app.getName() }} {{ app.getVersion() }}</span>
     </div>
     <div>

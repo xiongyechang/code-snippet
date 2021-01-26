@@ -44,4 +44,20 @@ html, body, #app {
 .code-snippet-disabled, .code-snippet-disabled:hover {
   background: pink !important;
 }
+
+.full-height {
+  height: 100%;
+}
+
+.pad5 {
+  padding: 5px;
+}
+
+.pad10 {
+  padding: 10px;
+}
+
+.mgn10 {
+  margin: 10px;
+}
 </style>
