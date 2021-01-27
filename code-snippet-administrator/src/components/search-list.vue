@@ -52,7 +52,7 @@ export default {
 
 <style scoped>
 .search-list {
-  background: #e8e8e8;
+  background-color: rgb(236, 239, 241);
   display: flex;
   flex-direction: column;
 }
@@ -73,6 +73,9 @@ export default {
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
+  margin-bottom: 5px;
+  margin-left: 10px;
+  border-radius: 3px 0 0 3px;
 }
 
 .list-item:hover {
@@ -82,11 +85,11 @@ export default {
 }
 
 .list-item:nth-child(odd) {
-  background-color: #FFFFFF;
+  background-color: rgba(192, 196, 204);
 }
 
 .list-item:nth-child(even) {
-  background-color: #FAFAFA;
+  background-color: rgba(192, 196, 204);
 }
 
 .title {
@@ -95,5 +98,10 @@ export default {
 
 li {
   list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 </style>

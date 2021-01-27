@@ -83,10 +83,10 @@ export default {
 
 <style lang="css" scoped>
 .search-list__row {
-  /*background-color: red;*/
   height: 100%;
 }
 .content {
   overflow: auto;
+  /* background-color: rgb(236, 239, 241); */
 }
 </style>

@@ -3,15 +3,18 @@
     <top-bar class="app-topbar"></top-bar>
     <router-view class="app-router-view"></router-view>
     <router-view name="blank"></router-view>
+    <bottom-bar></bottom-bar>
   </div>
 </template>
 
 <script>
 import TopBar from '@/components/topbar.vue';
+import BottomBar from '@/components/bottombar.vue';
 export default {
   name: 'App',
   components: {
-    TopBar
+    TopBar,
+    BottomBar
   }
 }
 </script>
@@ -31,7 +34,7 @@ html, body, #app {
 
 #app {
   display: grid;
-  grid-auto-rows: 33px calc(100% - 33px);
+  grid-auto-rows: 33px calc(100% - 66px) 33px;
   overflow: hidden;
 }
 

@@ -48,14 +48,10 @@
 			</el-form>
 			<el-row type="flex" justify="center">
 				<el-col :span="4">
-					<el-button @click="submitForm('ruleForm')" type="primary"
-						>登录</el-button
-					>
+					<el-button @click="submitForm('ruleForm')" type="primary">登录</el-button>
 				</el-col>
 				<el-col :span="4">
-					<el-button @click="forgetPwd" type="text"
-						>忘记密码</el-button
-					>
+					<el-button @click="forgetPwd" type="text">忘记密码</el-button>
 				</el-col>
 			</el-row>
 		</div>

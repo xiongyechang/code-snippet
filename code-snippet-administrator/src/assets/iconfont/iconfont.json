@@ -1,0 +1,51 @@
+{
+  "id": "2352963",
+  "name": "code-snippet",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "7137894",
+      "name": "ios-battery-charging",
+      "font_class": "battery-charging",
+      "unicode": "e7d1",
+      "unicode_decimal": 59345
+    },
+    {
+      "icon_id": "7655968",
+      "name": "ios-battery-full",
+      "font_class": "battery-full",
+      "unicode": "e70d",
+      "unicode_decimal": 59149
+    },
+    {
+      "icon_id": "11103046",
+      "name": "ios-battery-dead",
+      "font_class": "battery-empty",
+      "unicode": "e78d",
+      "unicode_decimal": 59277
+    },
+    {
+      "icon_id": "1899148",
+      "name": "wifi",
+      "font_class": "wifi-on-line",
+      "unicode": "e75c",
+      "unicode_decimal": 59228
+    },
+    {
+      "icon_id": "10506931",
+      "name": "online",
+      "font_class": "online",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "17103457",
+      "name": "wifi-off-line",
+      "font_class": "wifi-off-line",
+      "unicode": "e759",
+      "unicode_decimal": 59225
+    }
+  ]
+}

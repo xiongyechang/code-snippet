@@ -12,6 +12,7 @@ import "element-ui/lib/theme-chalk/index.css"
 import "@/assets/css/monokai-sublime.css"
 import "@/assets/css/prism.css"
 import "animate.css"
+import "@/assets/iconfont/iconfont.css"
 
 Vue.config.productionTip = false
 

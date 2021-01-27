@@ -55,4 +55,13 @@ const router = new VueRouter({
     ]
 });
 
+// router.beforeEach(function (to, from, next) {
+    
+//     if(to.path === '/login') {
+
+//     }
+    
+//     next()
+// })
+
 export default router

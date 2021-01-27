@@ -6,7 +6,7 @@
             <i class="el-icon-arrow-left"></i>
           </span>
         </div>
-        <img src="@/assets/logo.png" width="24" height="24">
+        <img :style="logoMarginLeft" src="@/assets/logo.png" width="24" height="24">
         <span>{{ app.getName() }} {{ app.getVersion() }}</span>
     </div>
     <div>
@@ -73,7 +73,12 @@ export default {
         : WindowSizeIcon.normal;
     },
     showBackBtn: function () {
-      return this.$route.path !== '';
+      return this.$route.path !== '/';
+    },
+    logoMarginLeft: function () {
+      return this.$route.path === '/' ? {
+        marginLeft: '10px'
+      } : null;
     }
   },
   methods: {
