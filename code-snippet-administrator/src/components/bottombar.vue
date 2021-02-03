@@ -90,13 +90,14 @@
                     } else {
                         this.battery.icon = BATTERY.CHARGING;
                     }
-                    this.battery.number = level * 100;
+                    this.battery.number = (level * 100).toFixed(2);
                 })
             },
 			goLoginPage() {
-				this.$router.push({
-					name: "login",
-				});
+                const name = this.$route.name;
+                if(name !== 'admin'){
+                    this.$router.push({ name: "admin" });
+                }				
 			},
 		},
 	};

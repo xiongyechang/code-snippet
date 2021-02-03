@@ -17,18 +17,22 @@ module.exports = async (ctx, next) => {
       if (token) {
         // 解密payload，获取用户名和ID
         let payload = await JWT.verify(token.split(" ")[1], jwtSecret);
-        console.log(payload);
         let params = {
           _id: payload.user_id,
           role: payload.role,
           roleCode: payload.roleCode,
           username: payload.username
         };
+        
         if (ctx.request.hasOwnProperty("query")) {
           Object.assign(ctx.request.query, params);
-        } else if (ctx.request.hasOwnProperty("body")) {
+        }
+        
+        if (ctx.request.hasOwnProperty("body")) {
           Object.assign(ctx.request.body, params);
         }
+
+        ctx.state.payload = payload;
         await next();
       } else {
         throw new Error("token不存在");

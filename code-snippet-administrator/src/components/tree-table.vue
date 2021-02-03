@@ -15,7 +15,6 @@
         node-key="_id"
         show-checkbox
         @node-click="nodeClickHandler"
-        style="height: 100%;"
       >
         <div class="custom-tree-node" slot-scope="{ data }">
           <template v-if="data.editable">

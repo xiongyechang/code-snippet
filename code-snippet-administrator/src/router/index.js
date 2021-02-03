@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+// import store from '@/store/store';
 
 Vue.use(VueRouter);
 
@@ -58,10 +59,17 @@ const router = new VueRouter({
 // router.beforeEach(function (to, from, next) {
     
 //     if(to.path === '/login') {
-
+//         next()
+//     } else if (to.path === '/admin') {
+//         const isLogin = store.state.admin.isLogin;
+//         if (isLogin) {
+//             next();
+//         } else {
+//             next({ name: 'login'});
+//         }
+//     } else {
+//         next()
 //     }
-    
-//     next()
 // })
 
 export default router

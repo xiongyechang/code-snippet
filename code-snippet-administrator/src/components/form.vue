@@ -2,7 +2,7 @@
     <div class="admin-page">
         <el-row class="row row2">
             <el-col class="row2-col1" :span="18">
-                <mavon-editor id="editor" v-model="form.content" @imgAdd="addImg" @save="save"/>
+                <mavon-editor ref="mavon-editor" id="editor" v-model="form.content" @imgAdd="addImg" @save="save"/>
             </el-col>
             <el-col :span="6" style="padding: 0;">
                 <div class="opt">
@@ -64,11 +64,13 @@ import xss from 'xss'
 import { parse } from 'flowchart.js'
 import { shell } from 'electron'
 import fs from 'fs'
-  import { HttpResponseCode } from '@/constants/constants'
+import { HttpResponseCode } from '@/constants/constants'
+import QiniuMixin from '@/mixins/qiniu';
 
 export default {
     name: "admin",
     components : { CodeCategory },
+    mixins: [QiniuMixin],
     props: {
         _id: String
     },
@@ -214,8 +216,14 @@ export default {
         saveMarkdown () {
             fs.writeFileSync("./markdown.md", this.form.content);
         },
-        addImg(file){
-            console.log(file)
+        async addImg(pos, file){
+          try {
+            const fileURL = await this.uploadToQiniu(file);
+            const editor = this.$refs["mavon-editor"];
+            editor.$img2Url(pos, fileURL);
+          } catch (error) {
+            console.error(error)
+          }
         },
         save: _.debounce(function (html) {
             if(!html.trim()) {
