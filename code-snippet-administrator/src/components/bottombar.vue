@@ -8,7 +8,8 @@
 			<span class="opt">
 				<i class="iconfont" :class="[network]"></i>
 			</span>
-			<span class="opt-minimize opt" @click.stop="goLoginPage">
+            <update></update>
+			<span class="opt-hover opt" @click.stop="goLoginPage">
 				<i class="el-icon-user-solid"></i>
 			</span>
 		</div>
@@ -16,6 +17,8 @@
 </template>
 
 <script>
+
+    import update from '@/components/update';
 
     const NETWORK = {
         WIFI_ONLINE: 'icon-wifi-on-line',
@@ -32,7 +35,8 @@
     }
 
 	export default {
-		name: "bottombar",
+        name: "bottombar",
+        components: { update },
 		data() {
 			return {
                 navigator: window.navigator,
@@ -44,20 +48,20 @@
             };
 		},
 		created() {    
-            // const navigator = window.navigator;
             
             this.detectNetwork();
 
-            const timer = setInterval(() => {
-                this.detectBattery();
-            }, 1000 * 60);
-
-            this.$on('hook:beforeDestroy', () => {
-                clearInterval(timer);
-            })
+            this.timewait();
 		},
 		methods: {
-
+            timewait () {
+                const timer = null;
+                this.detectBattery();
+                setTimeout(() => {
+                    clearTimeout(timer);
+                    this.timewait();
+                }, 1000 * 60);
+            },
             setNetwork () {
                 const connection = this.navigator.connection;
                 const { effectiveType } = connection;
@@ -90,7 +94,7 @@
                     } else {
                         this.battery.icon = BATTERY.CHARGING;
                     }
-                    this.battery.number = (level * 100).toFixed(2);
+                    this.battery.number = (level * 100).toFixed(0);
                 })
             },
 			goLoginPage() {
@@ -131,9 +135,7 @@
 			}
 		}
 
-		.opt-minimize,
-		.opt-maximize,
-		.opt-close {
+		.opt-hover {
 			cursor: pointer;
 			&:hover {
 				background: red;

@@ -12,7 +12,7 @@ const auth = require("./middleware/auth");
 
 const app = new Koa();
 
-const { CodeSnippetRouter, CodeCategoryRouter, AdminRouter } = require("./routes");
+const { CodeSnippetRouter, CodeCategoryRouter, AdminRouter, AppRouter } = require("./routes");
 
 app.keys = [config.sessionSecret];
 
@@ -67,15 +67,20 @@ app.use(
   })
 );
 
+
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
-app.use(auth);
+app.use(AppRouter.routes()).use(AppRouter.allowedMethods());
+
+
+// app.use(auth);
 
 app.use(CodeSnippetRouter.routes()).use(CodeSnippetRouter.allowedMethods());
 app.use(CodeCategoryRouter.routes()).use(CodeCategoryRouter.allowedMethods());
 
 app.use(AdminRouter.routes()).use(AdminRouter.allowedMethods());
 
+app.use(serve({rootDir: 'release', rootPath: '/update', index: 'latest.yml'})); // 软件自动更新地址
 app.use(serve({rootDir: 'public', rootPath: '/', index: 'index.html'}));
 
 app.on("error", function(error) {

@@ -17,6 +17,8 @@ router.get(route, async ctx => {
 
   let { version } = ctx.request.query; // 当前版本
 
+  console.log(100, version);
+
   try {
 
     const schema = Joi.string().pattern(new RegExp(/^(\d+\.{1}){2}\d/));
