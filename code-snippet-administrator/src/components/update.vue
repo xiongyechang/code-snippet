@@ -1,7 +1,7 @@
 <template>
     <span class="opt-hover opt">
-        <el-badge value="有更新啦" :hidden="!updateAvailable">
-            <i class="iconfont icon-update"></i>
+        <el-badge :value="message" :hidden="!updateAvailable">
+            <i @click="update" @dblclick="cancelUpdate" class="iconfont icon-update"></i>
         </el-badge>
     </span>
 </template>
@@ -13,7 +13,9 @@ export default {
     name: 'update',
     data(){
         return {
-            updateAvailable: false
+            updateAvailable: false,
+            message: `有更新啦`,
+            progress: 0
         }
     },
     mounted () {
@@ -22,10 +24,22 @@ export default {
 
         // 有更新
         ipcRenderer.on(Update.IsUpdate, () => {
-            // console.log(event)
             this.updateAvailable = true;
         });
 
+        // 正在更新
+        ipcRenderer.on(Update.DownloadProgress, (event, progress) => {
+            console.log(progress)
+            this.progress = (progress.percent.toFixed(2))
+        });
+    },
+    methods: {
+        update () {
+            ipcRenderer.send(Update.IsUpdate, true);
+        },
+        cancelUpdate () {
+            ipcRenderer.send(Update.CancelUpdate, true); 
+        }
     }
 }
 </script>

@@ -11,7 +11,7 @@ const router = new Router({
 });
 
 // 列出资源列表  ok
-router.get(route + "/list", async (ctx) => {
+router.get(route, async (ctx) => {
     let { limit = 1000, page = 1 } = ctx.request.query;
     try {
       const schema = Joi.object({

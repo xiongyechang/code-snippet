@@ -62,8 +62,9 @@ autoUpdater.on(Update.UpdateNotAvailable, function(info) {
 // 更新下载进度事件
 autoUpdater.on(Update.DownloadProgress, function(progressObj) {
   //与渲染进程通信
+  console.log(progressObj.percent);
   mainWindow.webContents.send(Update.DownloadProgress, progressObj);
-  // mainWindow.setProgressBar(progressObj.percent / 100);
+  mainWindow.setProgressBar(progressObj.percent / 100);
 });
 autoUpdater.on(Update.UpdateDownloaded, function(
   event,

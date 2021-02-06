@@ -1,5 +1,5 @@
 <template>
-  <div class="markdown" v-html="compiledMarkdown" v-highlight></div>
+  <div class="markdown" id="markdown" v-html="compiledMarkdown" v-highlight></div>
 </template>
 
 <script>
@@ -7,6 +7,11 @@ import marked from 'marked';
 import hljs from 'highlight.js';
 import { parse } from 'flowchart.js';
 import xss from "xss";
+import { Button } from "@/constants/constants";
+import { shell, remote } from 'electron';
+
+const dialog = remote.dialog;
+
 export default {
   name: "html-markdown",
   props: {
@@ -14,7 +19,7 @@ export default {
   },
   computed: {
     compiledMarkdown () {
-      return marked(this.markdown);
+      return marked(this.markdown, { sanitize: false });
     }
   },
   directives: {
@@ -23,6 +28,7 @@ export default {
       blocks.forEach(block => {
         hljs.highlightBlock(block);
       });
+      window.Prism.highlightAll();
     }
   },
   created() {
@@ -33,10 +39,14 @@ export default {
         const dom = document.createElement('div');
         const flowchart = parse(code);
         flowchart.drawSVG(dom);
-        return dom.innerHTML;
-      } else {
+        return dom.innerHTML
+      } else if (language === 'seq' || language === 'gantt') {
+        return hljs.highlightAuto(code).value
+      } else if (language) {
         // 默认解析
-        return xss(`<pre class="hljs"><code class="${language}">${hljs.highlightAuto(code).value}</code></pre>`)
+        return `<pre class="language-${language}"><code class="hljs language-${language}">${hljs.highlight(language, code, true).value}</code></pre>`
+      } else {
+        return xss(hljs.highlightAuto(code).value);
       }
     }
 
@@ -49,19 +59,42 @@ export default {
       sanitize: false,
       smartLists: true,
       smartypants: false,
-      highlight: function (code, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-          return hljs.highlight(lang, code, true).value;
+      highlight: function (code, language) {
+        if (language && hljs.getLanguage(language)) {
+          return hljs.highlight(language, code, true).value;
         } else {
           return hljs.highlightAuto(code).value;
         }
       }
     });
-
-    this.$loadStyle('./css/prism.css', () => {});
-    this.$loadStyle('./css/monokai-sublime.css', () => {});
-    this.$loadScript('./js/prism.js', () => {});
   },
+  mounted () {
+    const markdown = document.querySelector(`#markdown`);
+    markdown.addEventListener("click", event => {
+      const element = event.target;
+      if (element.tagName.toLowerCase() === 'a') {
+        event.preventDefault();
+
+        const result = dialog.showMessageBoxSync({
+          title: '通知',
+          type: 'question',
+          message: `是否使用默认浏览器打开该链接`,
+          buttons: [Button.Cancel, Button.OK]
+        });
+
+        if (result) {
+          shell.openExternal(element.href);
+        }
+
+      }
+    }, true);
+  },
+  methods: {
+    htmlClickHndler (e) {
+      console.log(e)
+      e.stopDefault(); 
+    }
+  }
 }
 </script>
 

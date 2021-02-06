@@ -17,7 +17,7 @@ export default {
 		return await http.put(`${baseURL}${prefix}${CodeSnippetRoute}`, codesnippet);
 	},
 	async getCodeSnippets (page = 1, limit = 20) {
-		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/list?page=${page}&limit=${limit}`);
+		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}?page=${page}&limit=${limit}`);
 	},
 	async getCodeSnippet (_id) {
 		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/${_id}`)
@@ -25,11 +25,11 @@ export default {
 	async removeCodeSnippet (_id) {
 		return await http.delete(`${baseURL}${prefix}${CodeSnippetRoute}?_id=${_id}`);
 	},
-	async searchCodeSnippet (keyword = '', limit = 20) {
-		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/search?keyword=${keyword}&limit=${limit}`);
+	async searchCodeSnippets (keyword = '', category = '', page = 1, limit = 20) {
+		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/search?keyword=${keyword}&category=${category}&page=${page}&limit=${limit}`);
 	},
 	async getCodeCategories () {
-		return await http.get(`${baseURL}${prefix}${CodeCategoryRoute}/list`);
+		return await http.get(`${baseURL}${prefix}${CodeCategoryRoute}`);
 	},
 	async getCodeSnippetsByCategory ({ _id, page = 1, limit = 20 }) {
 		return await http.get(`${baseURL}${prefix}${CodeSnippetRoute}/by?categoryId=${_id}&page=${page}&limit=${limit}`);

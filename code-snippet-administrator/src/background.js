@@ -34,8 +34,6 @@ async function createWindow() {
     }
   })
 
-  console.log(path.join(__dirname, "..", "public", "favicon.ico"))
-
   Menu.setApplicationMenu(null);
 
   require("./main/update");

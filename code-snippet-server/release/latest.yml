@@ -1,8 +1,8 @@
-version: 1.5.8
+version: 0.1.3
 files:
-  - url: https://cdn.xiongyechang.com/vue-electron-wallpaper@1.5.8.exe
-    sha512: sbbmmUo85seJyTErO+V2YVdPY+orVIHrqJyIBBImheA26u75ykt5b/SfNrA35mU5JonQD1TueHHP0xf4jVp3dQ==
-    size: 54416782
-path: vue-electron-wallpaper@1.5.8.exe
-sha512: sbbmmUo85seJyTErO+V2YVdPY+orVIHrqJyIBBImheA26u75ykt5b/SfNrA35mU5JonQD1TueHHP0xf4jVp3dQ==
-releaseDate: '2020-07-11T10:11:06.759Z'
+  - url: https://cdn.xiongyechang.com/code-snippet@0.1.3.exe
+    sha512: Y1CGU9YZQLrM5/lRn+ESSengi4gkbaBFLdGImJfIcEzTqrdQWUJ4qaJ1gRHK//W90/cpZVp7IOFOKf4hX3J/0A==
+    size: 58532177
+path: code-snippet@0.1.3.exe
+sha512: Y1CGU9YZQLrM5/lRn+ESSengi4gkbaBFLdGImJfIcEzTqrdQWUJ4qaJ1gRHK//W90/cpZVp7IOFOKf4hX3J/0A==
+releaseDate: '2021-02-06T15:37:21.114Z'

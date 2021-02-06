@@ -18,4 +18,9 @@ export const Update = {
     UpdateAvailable: "update-available",
     UpdateNotAvailable: "update-not-available",
     UpdateDownloaded: "update-downloaded"
-} 
+}
+
+export const Button = {
+    OK: "确定",
+    Cancel: "取消"
+}

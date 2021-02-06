@@ -12,7 +12,7 @@ const router = new Router({
 });
 
 // 列出资源列表  ok
-router.get(route + "/list", async (ctx) => {
+router.get(route, async (ctx) => {
   let { limit = 20, page = 1 } = ctx.request.query;
   try {
     const schema = Joi.object({
@@ -57,35 +57,47 @@ router.get(route + "/list", async (ctx) => {
 
 // 列出资源列表  ok
 router.get(route + "/search", async (ctx) => {
-  let { limit = 20, keyword } = ctx.request.query;
+  let { limit = 20, page = 1, keyword, category } = ctx.request.query;
   try {
     const schema = Joi.object({
-      keyword: Joi.string().required(),
-      limit: Joi.number().integer().min(1).max(100)
-    });
+      limit: Joi.number().integer().min(1).max(100),
+      page: Joi.number().integer().min(1)
+    })
 
-    let { error } = await schema.validate({ limit, keyword });
+    let { error } = await schema.validate({ limit, page });
 
     if (error) {
       throw error;
     }
     
+    page = parseInt(page, 10);
     limit = parseInt(limit, 10);
-    const reg = new RegExp(keyword, 'i');
+    const offset = (page - 1) * limit;
 
-    const conditions = { 
-      $or: [{
-        title: {
-          $regex: reg
-        }
-      }, {
-        content: {
-          $regex: reg
-        }
-      }] 
+    const conditions = new Object;
+
+    if (category) {
+      Object.assign(conditions, {
+        category
+      })
     }
 
-    let rows = await CodeSnippetModel.find(conditions).populate('category').limit(limit);
+    if (keyword) {
+      const reg = new RegExp(keyword, 'i');
+      Object.assign(conditions, {
+        $or: [{
+          title: {
+            $regex: reg
+          }
+        }, {
+          content: {
+            $regex: reg
+          }
+        }] 
+      }) 
+    }
+
+    let rows = await CodeSnippetModel.find(conditions).populate('category').skip(offset).limit(limit);
 
     let count = await CodeSnippetModel.countDocuments(conditions);
 

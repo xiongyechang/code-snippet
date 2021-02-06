@@ -2,7 +2,7 @@
   <div id="app">
     <top-bar class="app-topbar"></top-bar>
     <router-view class="app-router-view"></router-view>
-    <router-view name="blank"></router-view>
+    <router-view class="app-router-view" name="blank"></router-view>
     <bottom-bar></bottom-bar>
   </div>
 </template>
@@ -36,6 +36,7 @@ html, body, #app {
   display: grid;
   grid-auto-rows: 33px calc(100% - 66px) 33px;
   overflow: hidden;
+  height: 100%;
 }
 
 .flex-center-start {
@@ -49,6 +50,10 @@ html, body, #app {
 }
 
 .full-height {
+  height: 100%;
+}
+
+.app-router-view {
   height: 100%;
 }
 

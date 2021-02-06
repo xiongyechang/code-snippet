@@ -1,13 +1,11 @@
 const protocol = `http`;
-const host = `192.168.124.12`;
-// const host = `cs.xiongyechang.com`;
-const port = 8888;
-
 let URL = ``;
-
 if (process.env.NODE_ENV === "development") {
+	const host = `192.168.124.12`;
+	const port = 8888;
     URL = `${protocol}://${host}:${port}`;
 } else if (process.env.NODE_ENV === "production") {
+	const host = `cs.xiongyechang.com`;
     URL = `${protocol}://${host}`;
 }
 

@@ -1,7 +1,20 @@
 <template>
   <div class="search-list full-height">
     <div class="search-input pad5">
-      <el-input v-model="keyword"></el-input>
+      <el-input
+        v-model="keyword"
+        placeholder="请输入内容"
+        prefix-icon="el-icon-search"
+        @change="seachCodeSnippets">
+        <el-select v-model="category" @change="seachCodeSnippets" slot="prepend" placeholder="请选择">
+          <el-option v-for="item of options" :key="item._id" :label="item.title" :value="item._id">
+            <code-category :data="item"></code-category>
+          </el-option>
+        </el-select>
+        <template slot="append">
+          <el-button icon="el-icon-search" circle>搜索</el-button>
+        </template>
+      </el-input>
     </div>
     <ul class="list-outter">
       <li class="list-item" v-for="(c, index) of list" :key="index" @click="rowClick(c)">
@@ -15,19 +28,24 @@
 <script>
 import API from '@/api/api';
 import { HttpResponseCode } from '@/constants/constants';
+import CodeCategory from '@/components/code-category.vue'
 export default {
   name: "search-list",
+  components : { CodeCategory },
   data(){
     return {
       keyword: "",
       list: [],
       count: 0,
       page: 1,
-      limit: 20
+      limit: 20,
+      category: "",
+      options: []
     }
   },
   created () {
-    this.getCodeSnippets()
+    this.getCodeSnippets();
+    this.getCodeCategories();
   },
   methods: {
     async getCodeSnippets () {
@@ -43,8 +61,46 @@ export default {
         console.error(error)
       }
     },
+    async getCodeCategories () {
+      try {
+        const { code, message, data: { rows } } = await API.getCodeCategories();
+        if (code === HttpResponseCode.OK) {
+          this.options = rows.reduce(function(prev, curr) {
+            return prev.concat(curr)
+          }, [{
+            _id: null,
+            title: "全部",
+            avatar: "https://cdn.xiongyechang.com/all.png"
+          }]);
+        } else {
+          this.$message.error(message);
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    },
     rowClick(row){
       this.$emit("row-click", row);
+    },
+    async seachCodeSnippets () {
+      this.page = 1;
+
+      if (this.category === null) {
+        this.getCodeSnippets();
+        return;
+      }
+
+      try {
+        const { code, message, data: { rows, count } } = await API.searchCodeSnippets(this.keyword, this.category, this.page, this.limit);
+        if (code === HttpResponseCode.OK) {
+          this.list = rows;
+          this.count = count;
+        } else {
+          this.$message.error(message);
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }
@@ -73,9 +129,8 @@ export default {
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 5px;
-  margin-left: 10px;
-  border-radius: 3px 0 0 3px;
+  margin: 5px;
+  border-radius: 5px 0 5px 0;
 }
 
 .list-item:hover {
