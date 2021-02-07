@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import store from '@/store/store';
+import store from '@/store/store';
 
 Vue.use(VueRouter);
 
@@ -12,7 +12,8 @@ const router = new VueRouter({
             name: 'login',
             meta: {
                 title: '后台登录',
-                keepAlive: false
+                keepAlive: false,
+                requireAuth: false
             },
             components: {
                 // 对应 <router-view name="blank"></router-view>
@@ -24,7 +25,8 @@ const router = new VueRouter({
             name: 'web',
             meta: {
                 title: '主页',
-                keepAlive: false
+                keepAlive: false,
+                requireAuth: false
             },
             component: () => import(`@/views/web/web.vue`)
         },
@@ -33,7 +35,8 @@ const router = new VueRouter({
             name: 'admin',
             meta: {
                 title: '管理端',
-                keepAlive: false
+                keepAlive: false,
+                requireAuth: true
             },
             component: () => import(`@/views/admin/admin.vue`)
         },
@@ -43,7 +46,8 @@ const router = new VueRouter({
             name: 'form',
             meta: {
                 title: '表单',
-                keepAlive: false
+                keepAlive: false,
+                requireAuth: true
             },
             component: () => import(`@/components/form.vue`)
         }, 
@@ -56,20 +60,20 @@ const router = new VueRouter({
     ]
 });
 
-// router.beforeEach(function (to, from, next) {
-    
-//     if(to.path === '/login') {
-//         next()
-//     } else if (to.path === '/admin') {
-//         const isLogin = store.state.admin.isLogin;
-//         if (isLogin) {
-//             next();
-//         } else {
-//             next({ name: 'login'});
-//         }
-//     } else {
-//         next()
-//     }
-// })
+router.beforeEach(function (to, from, next) {
+    const requireAuth = to.meta.requireAuth;
+    if (requireAuth) {
+        const isLogin = store.state.admin.isLogin;
+        if (isLogin) {
+            next();
+        } else {
+            if (from.name !== 'login') {
+                next({ name: 'login'});
+            }
+        }
+    } else {
+        next()
+    }
+})
 
 export default router

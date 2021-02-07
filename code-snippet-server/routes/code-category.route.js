@@ -1,13 +1,22 @@
-const CodeSnippetModel = require("../models/code-snippet.model");
 const CodeCategoryModel = require("../models/code-category.model");
 const Router = require("koa-router");
 const Joi = require("@hapi/joi");
-const path = require("path");
 const { HttpResponseCode } = require("../constants/constants");
+const { auth } = require("../middleware/auth");
 
 const route = "code-category";
 const router = new Router({
   prefix: "/api/",
+});
+
+router.all("*", async (ctx, next) => {
+  const request = ctx.request;
+  const { method } = request;
+  if (['post', 'put', 'delete'].includes(method.toLowerCase())) {
+    await auth(ctx, next);
+  } else {
+    await next(ctx);
+  }
 });
 
 // 列出资源列表  ok

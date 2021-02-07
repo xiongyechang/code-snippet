@@ -1,6 +1,7 @@
 import { baseURL } from '@/config/config';
 import { getToken } from '@/utils/utils';
 import axios from "axios";
+import router from "../router";
 
 axios.interceptors.request.use(config => {
     const access_token = getToken();
@@ -10,7 +11,32 @@ axios.interceptors.request.use(config => {
     return config;
 }, Promise.reject);
 
-axios.interceptors.response.use(response => response, Promise.reject);
+axios.interceptors.response.use(response => {
+    if (response.status == 401) {
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+        window.document.cookie = "";
+        router.replace({
+            name: "login"
+        });
+    }
+    return response;
+}, error => {
+    const { status } = error.response;
+    switch (status) {
+        case '401':
+        case 401:
+            window.localStorage.clear();
+            window.sessionStorage.clear();
+            window.document.cookie = "";
+            router.replace({
+                name: "login"
+            })
+            break;
+    }
+
+    return Promise.reject(error);
+});
 
 const request = async (method, url, data) => {
     let args = null;

@@ -203,11 +203,6 @@
 
 <style lang="scss" scoped>
 	.container {
-		position: absolute;
-		top: 33px;
-		left: 0;
-		right: 0;
-		bottom: 0;
 		background-image: url("http://cdn.xiongyechang.com/blog-background.jpg");
 		background-size: cover;
 		display: flex;
