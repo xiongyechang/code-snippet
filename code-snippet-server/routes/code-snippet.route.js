@@ -269,19 +269,16 @@ router.put(`${route}`, async ctx => {
 
     let { error, value } = await schema.validate({ _id, title, summary, content, category, prev, next, relations, disabled });
 
-    console.log({
-      ...value,
-      updatedAt: new Date()
-    })
-
     if (error) {
       throw error;
     }
 
-    const CodeSnippet = await CodeSnippetModel.findOneAndUpdate({ _id }, {
+    const CodeSnippet = await CodeSnippetModel.findByIdAndUpdate(_id, {
       ...value,
       updatedAt: new Date()
     });
+
+    console.log(CodeSnippet);
 
     ctx.body = {
       code: HttpResponseCode.OK,
