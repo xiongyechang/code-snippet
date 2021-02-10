@@ -2,7 +2,7 @@
     <div class="admin-page">
         <el-row class="row row2">
             <el-col class="row2-col1" :span="18">
-                <mavon-editor ref="mavon-editor" id="editor" v-model="form.content" @imgAdd="addImg" @save="save"/>
+                <mavon-editor ref="mavon-editor" id="editor" :externalLink="externalLink" v-model="form.content" @imgAdd="addImg" @save="save"/>
             </el-col>
             <el-col :span="6" style="padding: 0;">
                 <div class="opt">
@@ -101,7 +101,15 @@ export default {
             }, {
                 label: "否",
                 value: false
-            }]
+            }],
+            externalLink: {
+                hljs_css: function() {
+                    // 这是你的代码高亮配色文件路径
+                    return '/css/monokai-sublime.css';
+                },
+                katex_css: true, // `false`表示禁用自动加载，它也可以是个函数，如果它是个函数，那么这个函数应该返回一个可访问的`katex`的css路径字符串
+                // 我们没有设置`katex_js`, `hljs_js`, `hljs_lang`, `markdown_css`， `mavon-editor`会认为它的值为`true`，它会默认使用`cdnjs`相关外链加载
+            }
         }
     },
     computed: {

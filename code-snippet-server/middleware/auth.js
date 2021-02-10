@@ -9,7 +9,7 @@ module.exports = {
       if (token) {
         let payload = await JWT.verify(token.split(" ")[1], jwtSecret);
         let params = {
-          _id: payload.user_id,
+          user_id: payload.user_id,
           role: payload.role,
           roleCode: payload.roleCode,
           username: payload.username
