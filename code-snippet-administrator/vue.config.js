@@ -25,6 +25,9 @@ module.exports = {
                     //   },
                     // ],
                 },
+                mac: {
+                    icon: "./public/favicon.icns", // 这里是设置的 dock 里面的图标
+                },
                 publish: [{
                     provider: "generic",
                     url: downloadURL,
