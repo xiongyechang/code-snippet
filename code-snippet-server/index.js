@@ -73,7 +73,7 @@ app.use(AdminRouter.routes()).use(AdminRouter.allowedMethods());
 app.use(CodeSnippetRouter.routes()).use(CodeSnippetRouter.allowedMethods());
 app.use(CodeCategoryRouter.routes()).use(CodeCategoryRouter.allowedMethods());
 
-app.use(serve({rootDir: 'release', rootPath: '/update', index: 'latest.yml'})); // 软件自动更新地址
+app.use(serve({rootDir: 'release', rootPath: '/api/update' })); // 软件自动更新地址
 app.use(serve({rootDir: 'public', rootPath: '/', index: 'index.html'}));
 
 app.on("error", function(error) {

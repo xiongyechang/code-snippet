@@ -9,7 +9,7 @@ const mainWindow = BrowserWindow.getFocusedWindow();
 const cancellationToken = new CancellationToken();
 
 //执行自动更新检查
-const feedUrl = `${baseURL}/update/`; // 更新包位置
+const feedUrl = `${baseURL}/api/update/`; // 更新包位置
 
 autoUpdater.autoDownload = false;
 
