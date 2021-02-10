@@ -85,7 +85,6 @@ autoUpdater.on(Update.UpdateDownloaded, function(
 });
 
 ipcMain.on(Update.CheckForUpdate, () => {
-    console.log(111111)
     //放外面的话启动客户端执行自动更新检查
     autoUpdater.checkForUpdates();
 });

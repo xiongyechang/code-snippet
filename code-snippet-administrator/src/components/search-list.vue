@@ -17,7 +17,9 @@
       </el-input>
     </div>
     <ul class="list-outter">
-      <li class="list-item" v-for="(c, index) of list" :key="index" @click="rowClick(c)">
+      <li class="list-item" :class="{
+        current: c === currentListItem
+      }" v-for="(c, index) of list" :key="index" @click="rowClick(c)">
         <el-avatar shape="square" size="small" :src="c.category.avatar"></el-avatar>
         <div class="title">{{ c.title }}</div>
       </li>
@@ -40,7 +42,8 @@ export default {
       page: 1,
       limit: 20,
       category: "",
-      options: []
+      options: [],
+      currentListItem: null
     }
   },
   created () {
@@ -80,6 +83,7 @@ export default {
       }
     },
     rowClick(row){
+      this.currentListItem = row;
       this.$emit("row-click", row);
     },
     async seachCodeSnippets () {
@@ -106,7 +110,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.selected {
+  background-color: rgba(49, 193, 124, 1) !important;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
 .search-list {
   background-color: rgb(236, 239, 241);
   display: flex;
@@ -133,18 +143,16 @@ export default {
   border-radius: 5px 0 5px 0;
 }
 
-.list-item:hover {
-  background: rgba(49, 193, 124, 1) !important;
-  font-weight: bold;
-  color: #FFFFFF;
+.current, .list-item:hover {
+  @extend .selected;
 }
 
 .list-item:nth-child(odd) {
-  background-color: rgba(192, 196, 204);
+  background-color: rgb(192, 196, 204);
 }
 
 .list-item:nth-child(even) {
-  background-color: rgba(192, 196, 204);
+  background-color: rgb(192, 196, 204);
 }
 
 .title {
