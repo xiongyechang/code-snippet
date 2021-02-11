@@ -79,6 +79,7 @@ export default {
             list:[],
             note: null,
             form: {
+                _id: '',
                 title: '',
                 summary: '',
                 disabled: false,
@@ -126,6 +127,8 @@ export default {
         }
     },
     created () {
+
+        this.form._id = this._id;
 
         var renderer = new marked.Renderer();
 
@@ -248,11 +251,12 @@ export default {
         async publish () {
             this.$refs['form'].validate(async valid => {
                 if (valid) {
-                    const request = this._id ? API.updateCodeSnippet : API.addCodeSnippet;
+                    const request = this.form._id ? API.updateCodeSnippet : API.addCodeSnippet;
                     try {
-                        const { code, message} = await request(this.form);
+                        const { code, message, data} = await request(this.form);
                         if (code === HttpResponseCode.OK) {
                             this.$message.success(message);
+                            Object.assign(this.form, data);
                         } else {
                             this.$message.error(message);
                         }
