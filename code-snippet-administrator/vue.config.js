@@ -16,7 +16,7 @@ if (os.type() === Platform.Windows) {
 } else if (os.type() === Platform.Linux) {
 
 } else if (os.type() === Platform.MacOS) {
-    downloadURL = `https://cdn.xiongyechang.com/${name}@${version}.exe`;
+    downloadURL = `https://cdn.xiongyechang.com/${name}@${version}.dmg`;
 }
 
 module.exports = {
@@ -44,7 +44,7 @@ module.exports = {
                 },
                 mac: {
                     icon: "./public/favicon.icns", // 这里是设置的 dock 里面的图标
-                    artifactName: "${productName}-mac@${version}.exe",
+                    // artifactName: "${productName}@${version}.dmg",
                 },
                 publish: [{
                     provider: "generic",
