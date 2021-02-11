@@ -1,10 +1,10 @@
 version: 0.1.6
 files:
-  - url: code-snippet-0.1.6-mac.zip
+  - url: https://cdn.xiongyechang.com/code-snippet-0.1.6-mac.zip
     sha512: CBrqU8KPWeU1UpQacA1x+1uGp18Q19vVGD2qp6zG0H/BOWF/asLMbGspsZ4yZ6PDRqwx8BDGVZOjYXUq/GXKcw==
     size: 78157708
     blockMapSize: 81907
-  - url: code-snippet-0.1.6.dmg
+  - url: https://cdn.xiongyechang.com/code-snippet-0.1.6.dmg
     sha512: /aGXqPkDafR1B9Kq7jIX2bx8fcC3IWSm5h+AAdOT1CnkNuE3YAER+L3ez52+xgJyEXT1YgdUXcT75m+wFaPndA==
     size: 80666612
 path: code-snippet-0.1.6-mac.zip
