@@ -1,7 +1,15 @@
 <template>
     <span class="opt-hover opt">
         <el-badge :value="message" :hidden="!updateAvailable">
-            <i @click="update" @dblclick="cancelUpdate" class="iconfont icon-update"></i>
+            <i v-if="!updating" @click="update" class="iconfont icon-update"></i>
+            <div v-else @dblclick="cancelUpdate" style="overflow: hidden;">
+                <div class="move">
+                    <span class="iblock">{{ progress }}%</span>
+                    <span class="iblock update-rotate">
+                        <i class="iconfont icon-update"></i>
+                    </span>
+                </div>
+            </div>
         </el-badge>
     </span>
 </template>
@@ -15,6 +23,7 @@ export default {
         return {
             updateAvailable: false,
             message: `有更新啦`,
+            updating: false,
             progress: 0
         }
     },
@@ -30,12 +39,17 @@ export default {
         // 正在更新
         ipcRenderer.on(Update.DownloadProgress, (event, progress) => {
             console.log(progress)
+
+            if (!this.updating) {
+                this.updating = true;
+            }
             this.progress = (progress.percent.toFixed(2))
         });
     },
     methods: {
         update () {
             ipcRenderer.send(Update.IsUpdate, true);
+            this.message = `双击取消更新`;
         },
         cancelUpdate () {
             ipcRenderer.send(Update.CancelUpdate, true); 
@@ -62,5 +76,30 @@ export default {
     &:hover {
         background: red;
     }
+}
+.update-rotate {
+    transform: rotateX(180deg);
+}
+
+.move {
+    animation: move 2s linear infinite;
+    &:hover {
+        animation-play-state: paused; // 暂停动画
+    }
+}
+
+@keyframes move {
+    0% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(40px);
+    }
+}
+
+.iblock {
+    display: block;
+    height: 33px;
+    line-height: 33px;
 }
 </style>

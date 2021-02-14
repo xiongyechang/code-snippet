@@ -16,21 +16,25 @@
         </template>
       </el-input>
     </div>
-    <ul class="list-outter">
-      <li class="list-item" :class="{
-        current: c === currentListItem
-      }" v-for="(c, index) of list" :key="index" @click="rowClick(c)">
-        <el-avatar shape="square" size="small" :src="c.category.avatar"></el-avatar>
-        <div class="title">{{ c.title }}</div>
-      </li>
-    </ul>
+    <div class="list-outter">
+      <ul class="list-inner">
+        <li class="list-item" :class="{
+          current: c === currentListItem
+        }" v-for="(c, index) of list" :key="index" @click="rowClick(c)">
+          <el-avatar shape="square" size="small" :src="c.category.avatar"></el-avatar>
+          <div class="title">{{ c.title }}</div>
+        </li>
+      </ul>
+      <div v-if="noMore" class="no-more">没有更多数据了</div>
+    </div>
   </div>
 </template>
 
 <script>
 import API from '@/api/api';
 import { HttpResponseCode } from '@/constants/constants';
-import CodeCategory from '@/components/code-category.vue'
+import CodeCategory from '@/components/code-category.vue';
+
 export default {
   name: "search-list",
   components : { CodeCategory },
@@ -50,13 +54,51 @@ export default {
     this.getCodeSnippets();
     this.getCodeCategories();
   },
+  computed: {
+    noMore () {
+      return this.list.length === this.count;
+    }
+  },
   methods: {
+    handleScroll () {
+
+      const outterDOM = document.querySelector('.list-outter');
+      const innerDOM = document.querySelector('.list-inner');
+     
+      const outterDOMHeight = outterDOM.clientHeight;
+      const innerDOMHeight = innerDOM.clientHeight;
+
+      if (innerDOMHeight < outterDOMHeight) {
+        return;
+      }
+
+      outterDOM.onscroll = () => {
+        if (outterDOMHeight + outterDOM.scrollTop >= innerDOMHeight) {
+
+          if (this.list.length === this.count) {
+            return;
+          }
+
+          if (this.page < Math.ceil(this.count / this.limit)) {
+            this.page++;
+            this.getCodeSnippets();
+          }
+        }
+      }
+    },
     async getCodeSnippets () {
       try {
         const { code, message, data: { rows, count } } = await API.getCodeSnippets(this.page, this.limit);
         if (code === HttpResponseCode.OK) {
-          this.list = rows;
           this.count = count;
+          if (this.page === 1) {
+            this.list = rows;
+          } else {
+            this.list.push.apply(this.list, rows); // 超大数据量时，push方法不创建新的数组，可以降低内存
+          }
+          this.$nextTick(() => {
+            this.handleScroll();
+          });
         } else {
           this.$message.error(message);
         }
@@ -99,6 +141,9 @@ export default {
         if (code === HttpResponseCode.OK) {
           this.list = rows;
           this.count = count;
+          this.$nextTick(() => {
+            this.handleScroll();
+          });
         } else {
           this.$message.error(message);
         }
@@ -130,6 +175,11 @@ export default {
 .list-outter {
   overflow: auto;
   height: calc(100% - 38px);
+}
+
+.list-inner {
+  margin: 0;
+  padding: 0;
 }
 
 .list-item {
@@ -166,5 +216,12 @@ li {
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
+}
+
+.no-more {
+  text-align: center;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
 }
 </style>

@@ -1,8 +1,6 @@
 const { version, name } = require("./package.json");
 const os = require('os');
 
-console.log(os.type());
-
 const Platform = {
     Windows: "Windows_NT",
     Linux: "Linux",
@@ -36,7 +34,7 @@ module.exports = {
                       {
                         target: "nsis", //利用nsis制作安装程序
                         arch: [
-                          "x64", //64位
+                        //   "x64", //64位
                           "ia32", //32位
                         ],
                       },

@@ -7,7 +7,8 @@
     "dev": "cross-env NODE_ENV=development nodemon bin/www",
     "start": "cross-env NODE_ENV=development nodemon --harmony bin/www",
     "dev:prod": "cross-env NODE_ENV=production nodemon --harmony bin/www",
-    "prod": "cross-env NODE_ENV=production pm2 start bin/www"
+    "prod": "cross-env NODE_ENV=production pm2 start bin/www",
+    "deamon": "cross-env NODE_ENV=development pm2 start bin/www"
   },
   "repository": "git@gitee.com:xiongyechang/itcommunity.git",
   "author": "xiongyechang <a226791767@gmail.com>",
