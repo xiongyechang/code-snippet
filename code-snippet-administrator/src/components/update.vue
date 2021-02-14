@@ -1,5 +1,5 @@
 <template>
-    <span class="opt-hover opt">
+    <span class="opt-hover opt" title='更新'>
         <el-badge :value="message" :hidden="!updateAvailable">
             <i v-if="!updating" @click="update" class="iconfont icon-update"></i>
             <div v-else @dblclick="cancelUpdate" style="overflow: hidden;">

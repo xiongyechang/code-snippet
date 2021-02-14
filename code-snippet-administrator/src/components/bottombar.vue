@@ -1,15 +1,15 @@
 <template>
 	<div id="bottombar" ref="bottombar">
 		<div class="opts">
-            <span class="opt">
+            <span class="opt" title='电量'>
 				<i class="iconfont" :class="[battery.icon]"></i>
                 <span class="iconfont-title">{{ battery.number }}%</span>
 			</span>
-			<span class="opt">
+			<span class="opt" title='网络'>
 				<i class="iconfont" :class="[network]"></i>
 			</span>
             <update></update>
-			<span class="opt-hover opt" @click.stop="goLoginPage">
+			<span class="opt-hover opt" title='后台管理系统' @click.stop="goLoginPage">
 				<i class="el-icon-user-solid"></i>
 			</span>
 		</div>

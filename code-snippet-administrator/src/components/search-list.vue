@@ -214,8 +214,8 @@ li {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 0px;
+  height: 0px;
 }
 
 .no-more {
@@ -223,5 +223,7 @@ li {
   font-size: 12px;
   height: 20px;
   line-height: 20px;
+  margin-bottom: 5px;
+  color: #333333;
 }
 </style>

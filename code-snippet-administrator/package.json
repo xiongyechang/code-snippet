@@ -1,6 +1,8 @@
 {
-  "name": "code-snippet-administrator",
-  "version": "0.1.9",
+  "name": "code-snippet",
+  "version": "0.2.0",
+  "author": "熊业昌",
+  "description": "代码片段",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
