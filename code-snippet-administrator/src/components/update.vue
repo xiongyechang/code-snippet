@@ -82,7 +82,7 @@ export default {
 }
 
 .move {
-    animation: move 2s linear infinite;
+    animation: move 1s linear infinite;
     &:hover {
         animation-play-state: paused; // 暂停动画
     }

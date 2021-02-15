@@ -1,12 +1,12 @@
-version: 0.1.6
+version: 0.2.0
 files:
-  - url: https://cdn.xiongyechang.com/code-snippet-0.1.6-mac.zip
-    sha512: CBrqU8KPWeU1UpQacA1x+1uGp18Q19vVGD2qp6zG0H/BOWF/asLMbGspsZ4yZ6PDRqwx8BDGVZOjYXUq/GXKcw==
-    size: 78157708
-    blockMapSize: 81907
-  - url: https://cdn.xiongyechang.com/code-snippet-0.1.6.dmg
-    sha512: /aGXqPkDafR1B9Kq7jIX2bx8fcC3IWSm5h+AAdOT1CnkNuE3YAER+L3ez52+xgJyEXT1YgdUXcT75m+wFaPndA==
-    size: 80666612
-path: code-snippet-0.1.6-mac.zip
-sha512: CBrqU8KPWeU1UpQacA1x+1uGp18Q19vVGD2qp6zG0H/BOWF/asLMbGspsZ4yZ6PDRqwx8BDGVZOjYXUq/GXKcw==
-releaseDate: '2021-02-11T02:20:10.848Z'
+  - url: https://cdn.xiongyechang.com/code-snippet-0.2.0-mac.zip
+    sha512: evT0GLUM5ztNrUIYEF9hbjIYBMrR1JaTBOG5DUuEhx/uqWKIU3LVivzq/UtdWHYsmnEAnLa4jgkXwCyaSWTlTQ==
+    size: 78160058
+    blockMapSize: 81902
+  - url: https://cdn.xiongyechang.com/code-snippet-0.2.0.dmg
+    sha512: cZcYpaOH0SVGP4fEovpE4E852rLsBnOOUrBwmZpfW8N8p5XLhdwO9YT77cekapNAv4Y3OAyF46jeMKW0FQ+/Jw==
+    size: 80673501
+path: code-snippet-0.2.0-mac.zip
+sha512: evT0GLUM5ztNrUIYEF9hbjIYBMrR1JaTBOG5DUuEhx/uqWKIU3LVivzq/UtdWHYsmnEAnLa4jgkXwCyaSWTlTQ==
+releaseDate: '2021-02-14T12:26:57.427Z'

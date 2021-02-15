@@ -4,7 +4,7 @@ import { Update } from "@/constants/constants";
 
 const { baseURL } = require("../config/config");
 
-const mainWindow = BrowserWindow.getFocusedWindow();
+const mainWindow = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0];
 
 const cancellationToken = new CancellationToken();
 

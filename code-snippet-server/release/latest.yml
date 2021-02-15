@@ -1,8 +1,8 @@
-version: 0.1.9
+version: 0.2.1
 files:
-  - url: https://cdn.xiongyechang.com/code-snippet@0.1.9.exe
-    sha512: KYRqLjwpts4n39FXhwQWbbSLj46BY4HTbl8q8STqVoa7sbHsXlEaYqf8KYEwwuD1FnFDr7gC93PDJ+naVdMCyQ==
-    size: 55704696
-path: code-snippet@0.1.9.exe
-sha512: KYRqLjwpts4n39FXhwQWbbSLj46BY4HTbl8q8STqVoa7sbHsXlEaYqf8KYEwwuD1FnFDr7gC93PDJ+naVdMCyQ==
-releaseDate: '2021-02-12T08:17:08.723Z'
+  - url: https://cdn.xiongyechang.com/code-snippet@0.2.1.exe
+    sha512: gPIXPaQMHEMwlIRuUC/BhbZ0OD2Ujs+7Ns02LUUTUVeo1icZhWGZ77RTlz19kIHylzdIw4lLOfqtqT3JUYOlfw==
+    size: 55704985
+path: code-snippet@0.2.1.exe
+sha512: gPIXPaQMHEMwlIRuUC/BhbZ0OD2Ujs+7Ns02LUUTUVeo1icZhWGZ77RTlz19kIHylzdIw4lLOfqtqT3JUYOlfw==
+releaseDate: '2021-02-15T01:31:15.611Z'
