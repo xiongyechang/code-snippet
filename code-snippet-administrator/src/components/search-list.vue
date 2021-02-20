@@ -23,6 +23,7 @@
         }" v-for="(c, index) of list" :key="index" @click="rowClick(c)">
           <el-avatar shape="square" size="small" :src="c.category.avatar"></el-avatar>
           <div class="title">{{ c.title }}</div>
+          <div class="list-index" :index="index">{{index+1}}</div>
         </li>
       </ul>
       <div v-if="noMore" class="no-more">没有更多数据了</div>
@@ -191,6 +192,24 @@ export default {
   cursor: pointer;
   margin: 5px;
   border-radius: 5px 0 5px 0;
+  position: relative;
+}
+
+.list-index {
+  position: absolute;
+  right: 0;
+  height:100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  width: 50px;
+  padding-right: 10px;
+  font-size: 28px;
+  transform: rotateZ(30deg);
+  color: #e3e3e3;
+  font-family: 'fira code retina';
+  mix-blend-mode: lighten;
+  z-index: 2;
 }
 
 .current, .list-item:hover {

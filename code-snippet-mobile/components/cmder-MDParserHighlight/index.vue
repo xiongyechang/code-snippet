@@ -30,7 +30,7 @@
 			return {
 				tagStyle: {
 				    // 代码块
-				    pre: 'overflow: auto;background: #f5f5f5;padding: 1em;white-space: pre;margin:1em;',
+				    pre: 'overflow: auto;background: #23241f;padding: 0.5rem;border-radius: 0.2rem;'
 				},
 			}
 		},
@@ -67,6 +67,6 @@
 </script>
 
 <style lang="scss">
-	@import url('./highlight.js/styles/nnfx.css');
-	@import url('./assets/default.css');
+	// @import url('./highlight.js/styles/monokai-sublime.css');
+	// @import url('./assets/default.css');
 </style>

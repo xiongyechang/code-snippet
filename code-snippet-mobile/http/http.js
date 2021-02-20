@@ -6,8 +6,8 @@ class Http {
 				success: function(response){
 					const { cookies, errMsg, header, statusCode, data: result } = response;
 					if ([200, 304].includes(statusCode)) {						
-						const { status, message, data } = result;
-						if (status === 200) {
+						const { code, message, data } = result;
+						if (code === 200) {
 							resolve(data)
 						} else {
 							uni.showToast({
@@ -33,8 +33,8 @@ class Http {
 				success: function(response){
 					const { cookies, errMsg, header, statusCode, data: result } = response;
 					if ([200, 304].includes(statusCode)) {						
-						const { status, message, data } = result;
-						if (status === 200) {
+						const { code, message, data } = result;
+						if (code === 200) {
 							resolve(data)
 						} else {
 							uni.showToast({

@@ -73,6 +73,7 @@ export default {
 
 <style lang="scss">
 	@import url("@/static/css/monokai-sublime.css");
+	@import url("@/static/css/prism.css");
 	
 	.horizontal {
 		display: flex;
@@ -81,7 +82,7 @@ export default {
 	}
 	
 	.padding10{
-		padding: 0 10rpx
+		padding: 0 10rpx;
 	}
 	
 	.title-text {

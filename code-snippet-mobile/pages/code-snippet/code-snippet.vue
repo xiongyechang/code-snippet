@@ -12,19 +12,10 @@
 					<view>
 						<text class="title-text">{{ formatDate(item.createdAt, "YYYY-MM-DD") }}</text>
 					</view>
-					<view>
-						<!-- <uni-icons type="eye-filled" color="#409EFF" size="16" /> -->
-						<!-- <text class="title-text"> : 112</text> -->
-						
-					<!-- 	<uni-icons type="hand-thumbsup-filled" color="#67C23A" size="16" />
-						<text class="title-text">: {{ item.liked }}</text>
-						
-						<uni-icons type="heart-filled" color="#F56C6C" size="16" />
-						<text class="title-text">: {{ item.collected }}</text> -->
-					</view>
 				</view>
 			</uni-list-chat>
 		</uni-list>
+		<view v-if="noMore" class="no-more">没有更多数据了</view>
 	</view>
 </template>
 
@@ -42,6 +33,11 @@ export default {
 		UniSearchBar,
 		UniListChat
 	},
+	computed: {
+		noMore () {
+			return this.total === this.listData.length && this.total !== 0;
+		}
+	},
   data () {
     return {
 			reload: false,
@@ -52,27 +48,25 @@ export default {
 			tabBars: [],
 			scrollInto: '',
 			tabIndex: 0,
-			cache: {}
+			category: ''
 		}
   },
   onLoad () {
 		console.log("onLoad...");
 	},
-	onPullDownRefresh () {
-		
-	},
+	onPullDownRefresh () {},
 	onReachBottom () {
 		console.log("触底了");
 		if(this.listData.length < this.total) {
 			this.page++;
 			this.fetchData(this.page, this.limit, true);
 		} else {
-			uni.showToast({
-				icon: "none",
-				mask: true,
-				title: "没有更多数据了",
-				duration: 3000
-			})
+			// uni.showToast({
+			// 	icon: "none",
+			// 	mask: true,
+			// 	title: "没有更多数据了",
+			// 	duration: 3000
+			// })
 		}
 	},
 	beforeCreate () {
@@ -98,7 +92,7 @@ export default {
 			
 			data.unshift({
 				index: 0,
-				_id: "all",
+				_id: null,
 				id: "all",
 				name: "全部"
 			})
@@ -110,7 +104,6 @@ export default {
 			if(loadMore) {
 				this.listData = this.listData.concat(this.formatData(rows));
 			} else {
-				console.log(rows);
 				this.listData = this.formatData(rows);
 				this.total = count;
 			}
@@ -137,7 +130,12 @@ export default {
 		},
 		async search ({value}) {
 			if(value.trim()){
-				const { rows, count } = await API.searchCodeSnippet(value);
+				this.page = 1;
+				if (this.category == null) {
+					this.fetchData();
+					return;
+				}
+				const { rows, count } = await API.searchCodeSnippet(value, this.category, this.page, this.limit);
 				this.listData = this.formatData(rows);
 				this.total = count;
 			}else{
@@ -155,10 +153,11 @@ export default {
 			if (this.tabIndex === index) {
 			    return;
 			}
+			this.category = tab._id;
 			this.tabIndex = index;
 			this.scrollInto = this.tabBars[index].id;
 			
-			if (tab.id === 'all') {
+			if (this.category === null) {
 				this.fetchData();
 			} else {
 				this.getCodeSnippetsByCategory(tab._id)
@@ -236,5 +235,13 @@ export default {
 	.title-text {
 		color: gray;
 		font-size: 24rpx;
+	}
+	
+	.no-more {
+		text-align: center;
+		height: 40rpx;
+		line-height: 40rpx;
+		padding: 20rpx 0;
+		font-size: 28rpx;
 	}
 </style>

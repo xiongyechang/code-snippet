@@ -102,7 +102,7 @@ export default {
 .markdown {
   word-break: break-all;
   line-height: 2rem;
-  font-size: 18px;
+  font-size: 16px;
   font-family: "Fira Code Retina";
 
   hr {

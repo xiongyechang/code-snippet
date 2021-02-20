@@ -1,7 +1,11 @@
 {
   "name": "code-snippet",
-  "version": "0.2.1",
-  "author": "熊业昌",
+  "version": "0.2.2",
+  "author": {
+    "name": "熊业昌",
+    "email": "2226791767@qq.com"
+  },
+  "homepage": "https://github.com/xiongyechang/code-snippet",
   "description": "代码片段",
   "private": true,
   "scripts": {
