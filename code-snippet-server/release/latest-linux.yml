@@ -1,0 +1,9 @@
+version: 0.2.2
+files:
+  - url: https://cdn.xiongyechang.com/code-snippet-0.2.2.AppImage
+    sha512: mR47i8I5SKsx+9mrmokzp4sXZ3C4sCsaGlhvt9g8ERjI48qlIlHbEjs85tU9rBlE2Y+dGA8V34nf2X7061e1UQ==
+    size: 80461391
+    blockMapSize: 85603
+path: code-snippet-0.2.2.AppImage
+sha512: mR47i8I5SKsx+9mrmokzp4sXZ3C4sCsaGlhvt9g8ERjI48qlIlHbEjs85tU9rBlE2Y+dGA8V34nf2X7061e1UQ==
+releaseDate: '2021-02-20T13:44:23.178Z'

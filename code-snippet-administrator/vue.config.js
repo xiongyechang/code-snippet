@@ -47,7 +47,7 @@ module.exports = {
                     // artifactName: "${productName}@${version}.dmg",
                 },
                 linux: {
-                    icon: "build/icons", // 包含各种尺寸图标的文件夹
+                    icon: "./public/logo.png", // 包含各种尺寸图标的文件夹
                     target: [
                         "AppImage",
                         "deb",
