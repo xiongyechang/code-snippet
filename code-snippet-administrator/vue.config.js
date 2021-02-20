@@ -12,7 +12,7 @@ let downloadURL = ``;
 if (os.type() === Platform.Windows) {
     downloadURL = `https://cdn.xiongyechang.com/${name}@${version}.exe`;
 } else if (os.type() === Platform.Linux) {
-
+    downloadURL = `https://cdn.xiongyechang.com/${name}-${version}.AppImage`;
 } else if (os.type() === Platform.MacOS) {
     downloadURL = `https://cdn.xiongyechang.com/${name}@${version}.dmg`;
 }
