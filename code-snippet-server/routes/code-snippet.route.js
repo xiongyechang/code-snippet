@@ -39,10 +39,17 @@ router.get(route, async (ctx) => {
     const offset = (page - 1) * limit;
 
     let rows = await CodeSnippetModel
-                     .find()
+                     .find(null, {
+                       title: 1,
+                       _id: 1,
+                       createdAt: 1,
+                       updatedAt: 1,
+                       disabled: 1,
+                       liked: 1,
+                       collected: 1,
+                       viewed: 1
+                     })
                      .populate('category')
-                     .populate('prev', '_id title')
-                     .populate('next', '_id title')
                      .populate('relations')
                      .skip(offset)
                      .limit(limit);
@@ -207,22 +214,19 @@ router.get(`${route}/:_id`, async ctx => {
 
 router.post(`${route}`, async ctx => {
 
-  const { title, summary, content, category, prev, next, relations, disabled } = ctx.request.body;
+  const { title, content, category, relations, disabled } = ctx.request.body;
 
   try {
      
     const schema = Joi.object({
       title: Joi.string().required(),
-      summary: Joi.string().required(),
       content: Joi.string().required(),
       category: Joi.string().required(),
-      prev: Joi.string(),
-      next: Joi.string(),
       relations: Joi.array().items(Joi.string()).default([]),
       disabled: Joi.boolean().default(false)
     });
 
-    let { error, value } = await schema.validate({ title, summary, content, category, prev, next, relations, disabled });
+    let { error, value } = await schema.validate({ title, content, category, relations, disabled });
 
     console.log(value)
 
@@ -251,23 +255,20 @@ router.post(`${route}`, async ctx => {
 
 router.put(`${route}`, async ctx => {
 
-  const { _id, title, summary, content, category, prev, next, relations, disabled } = ctx.request.body;
+  const { _id, title, content, category, prev, next, relations, disabled } = ctx.request.body;
 
   try {
      
     const schema = Joi.object({
       _id: Joi.string().required(),
       title: Joi.string().required(),
-      summary: Joi.string().required(),
       content: Joi.string().required(),
       category: Joi.string().required(),
-      prev: Joi.string(),
-      next: Joi.string(),
       relations: Joi.array().items(Joi.string()).default([]),
       disabled: Joi.boolean().default(false)
     });
 
-    let { error, value } = await schema.validate({ _id, title, summary, content, category, prev, next, relations, disabled });
+    let { error, value } = await schema.validate({ _id, title, content, category, relations, disabled });
 
     if (error) {
       throw error;

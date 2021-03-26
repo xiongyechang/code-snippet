@@ -6,5 +6,5 @@ const port = 8888;
 const devURL = `${protocol}://${host}:${port}`;
 const prodURL = `${protocol}://cs.xiongyechang.com`;
 
-export const baseURL = devURL;
-// export const baseURL = prodURL;
+// export const baseURL = devURL;
+export const baseURL = prodURL;

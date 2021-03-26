@@ -48,8 +48,8 @@ router.get(route + "/getVerifyCode", async ctx => {
 
 	const cap = svgCaptcha.create({
 		size: 4, // 验证码长度
-		width: 100,
-		height: 32,
+		width: 120,
+		height: 40,
 		fontSize: 30,
 		ignoreChars: "0oO1ilI", // 验证码字符中排除 0o1i
 		noise: 3, // 干扰线条的数量

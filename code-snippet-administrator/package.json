@@ -1,12 +1,12 @@
 {
-  "name": "code-snippet",
+  "name": "baoma",
   "version": "0.2.2",
   "author": {
     "name": "熊业昌",
     "email": "2226791767@qq.com"
   },
-  "homepage": "https://github.com/xiongyechang/code-snippet",
-  "description": "代码片段",
+  "homepage": "https://github.com/xiongyechang/baoma",
+  "description": "宝码",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
